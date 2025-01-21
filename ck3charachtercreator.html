@@ -31,6 +31,17 @@
         button:hover {
             background-color: #4cae4c;
         }
+        .date-box {
+            display: inline-block;
+            width: 30%;
+            margin-right: 5%;
+        }
+        .date-label {
+            display: block;
+        }
+        .character-select {
+            margin-bottom: 10px;
+        }
     </style>
 </head>
 <body>
@@ -63,29 +74,36 @@
     <input type="text" id="culture" placeholder="Enter Culture" required>
     <input type="checkbox" id="keepCulture" checked> Keep Culture on Add
 
-    <label for="father">Father's ID (or leave blank):</label>
-    <input type="text" id="father" placeholder="Enter Father's Namespace_ID">
+    <h2>Parent Selection:</h2>
+    <label for="fatherSelect" class="character-select">Father:</label>
+    <select id="fatherSelect">
+        <option value="">Select Father</option>
+    </select>
 
-    <label for="mother">Mother's ID (or leave blank):</label>
-    <input type="text" id="mother" placeholder="Enter Mother's Namespace_ID">
+    <label for="motherSelect" class="character-select">Mother:</label>
+    <select id="motherSelect">
+        <option value="">Select Mother</option>
+    </select>
 
-    <label for="birthYear">Birth Year:</label>
-    <input type="number" id="birthYear" placeholder="Enter Birth Year" required>
+    <h2>Birth Info:</h2>
+    <div>
+        <label class="date-label">Birth Year:</label>
+        <input type="number" class="date-box" id="birthYear" placeholder="Year" required onkeypress="moveFocus(event, 'birthMonth')">
+        <label class="date-label">Birth Month:</label>
+        <input type="number" class="date-box" id="birthMonth" placeholder="Month" min="1" max="12" required onkeypress="moveFocus(event, 'birthDay')">
+        <label class="date-label">Birth Day:</label>
+        <input type="number" class="date-box" id="birthDay" placeholder="Day" min="1" max="31" required>
+    </div>
 
-    <label for="birthMonth">Birth Month:</label>
-    <input type="number" id="birthMonth" placeholder="Enter Birth Month (1-12)" min="1" max="12" required>
-
-    <label for="birthDay">Birth Day:</label>
-    <input type="number" id="birthDay" placeholder="Enter Birth Day (1-31)" min="1" max="31" required>
-
-    <label for="deathYear">Death Year:</label>
-    <input type="number" id="deathYear" placeholder="Enter Death Year">
-
-    <label for="deathMonth">Death Month:</label>
-    <input type="number" id="deathMonth" placeholder="Enter Death Month (1-12)" min="1" max="12">
-
-    <label for="deathDay">Death Day:</label>
-    <input type="number" id="deathDay" placeholder="Enter Death Day (1-31)" min="1" max="31">
+    <h2>Death Info:</h2>
+    <div>
+        <label class="date-label">Death Year:</label>
+        <input type="number" class="date-box" id="deathYear" placeholder="Year" onkeypress="moveFocus(event, 'deathMonth')">
+        <label class="date-label">Death Month:</label>
+        <input type="number" class="date-box" id="deathMonth" placeholder="Month" min="1" max="12" onkeypress="moveFocus(event, 'deathDay')">
+        <label class="date-label">Death Day:</label>
+        <input type="number" class="date-box" id="deathDay" placeholder="Day" min="1" max="31">
+    </div>
 
     <button onclick="addCharacter()">Add Character</button>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
@@ -99,6 +117,7 @@
         let dynasty = '';
         let religion = '';
         let culture = '';
+        let characters = [];
 
         document.getElementById('namespace').addEventListener('change', function() {
             namespace = this.value.trim();
@@ -116,11 +135,18 @@
             culture = this.value.trim();
         });
 
+        function moveFocus(event, nextId) {
+            if (event.key === 'Enter') {
+                event.preventDefault(); // Prevent form submission
+                document.getElementById(nextId).focus();
+            }
+        }
+
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
             const female = document.getElementById('female').value;
-            const father = document.getElementById('father').value.trim();
-            const mother = document.getElementById('mother').value.trim();
+            const father = document.getElementById('fatherSelect').value;
+            const mother = document.getElementById('motherSelect').value;
 
             // Get birth date
             const birthYear = document.getElementById('birthYear').value.trim();
@@ -159,18 +185,37 @@
             characterEntry += `}\n\n`;
 
             characterData += characterEntry;
+            characters.push({ name, female, id }); // Store character for parent selection
+            updateParentOptions();
             document.getElementById('output').textContent = characterData;
 
             // Clear input fields after adding the character
             document.getElementById('name').value = '';
-            document.getElementById('father').value = '';
-            document.getElementById('mother').value = '';
+            document.getElementById('fatherSelect').value = '';
+            document.getElementById('motherSelect').value = '';
             document.getElementById('birthYear').value = '';
             document.getElementById('birthMonth').value = '';
             document.getElementById('birthDay').value = '';
             document.getElementById('deathYear').value = '';
             document.getElementById('deathMonth').value = '';
             document.getElementById('deathDay').value = '';
+        }
+
+        function updateParentOptions() {
+            const fatherSelect = document.getElementById('fatherSelect');
+            const motherSelect = document.getElementById('motherSelect');
+
+            fatherSelect.innerHTML = '<option value="">Select Father</option>'; // Reset options
+            motherSelect.innerHTML = '<option value="">Select Mother</option>'; // Reset options
+
+            characters.forEach(character => {
+                const option = new Option(character.name, `${namespace}_${character.id}`);
+                if (character.female === "no") { // Male character
+                    fatherSelect.add(option);
+                } else { // Female character
+                    motherSelect.add(option);
+                }
+            });
         }
 
         function copyToClipboard() {
