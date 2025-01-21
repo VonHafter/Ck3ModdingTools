@@ -60,10 +60,6 @@
         .lifestyle-container {
             margin-top: 10px;
         }
-        .search-input {
-            margin-bottom: 10px;
-            padding: 10px;
-        }
     </style>
 </head>
 <body>
@@ -99,7 +95,6 @@
     <h2>Lifestyles</h2>
     <div class="lifestyle-container">
         <label for="lifestyle1">Lifestyle 1:</label>
-        <input type="text" class="search-input" id="searchLifestyle1" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle1', 'lifestyle1')">
         <select id="lifestyle1" onkeypress="moveFocus(event, 'lifestyle2')">
             <option value="">Select Lifestyle</option>
             <option value="Lustful">Lustful</option>
@@ -141,7 +136,6 @@
         </select>
 
         <label for="lifestyle2">Lifestyle 2:</label>
-        <input type="text" class="search-input" id="searchLifestyle2" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle2', 'lifestyle2')">
         <select id="lifestyle2" onkeypress="moveFocus(event, 'lifestyle3')">
             <option value="">Select Lifestyle</option>
             <option value="Lustful">Lustful</option>
@@ -183,7 +177,6 @@
         </select>
 
         <label for="lifestyle3">Lifestyle 3:</label>
-        <input type="text" class="search-input" id="searchLifestyle3" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle3', 'lifestyle3')">
         <select id="lifestyle3" onkeypress="moveFocus(event, 'fatherSelect')">
             <option value="">Select Lifestyle</option>
             <option value="Lustful">Lustful</option>
@@ -294,19 +287,6 @@
             });
         });
 
-        function filterLifestyles(searchInputId, selectId) {
-            const input = document.getElementById(searchInputId);
-            const filter = input.value.toLowerCase();
-            const select = document.getElementById(selectId);
-            const options = select.options;
-
-            for (let i = 0; i < options.length; i++) {
-                const option = options[i];
-                const text = option.text.toLowerCase();
-                option.style.display = text.includes(filter) ? "" : "none";
-            }
-        }
-
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
             const female = document.getElementById('female').value;
@@ -379,9 +359,6 @@
             document.getElementById('lifestyle1').value = '';
             document.getElementById('lifestyle2').value = '';
             document.getElementById('lifestyle3').value = '';
-            document.getElementById('searchLifestyle1').value = '';
-            document.getElementById('searchLifestyle2').value = '';
-            document.getElementById('searchLifestyle3').value = '';
         }
 
         function updateParentOptions() {
