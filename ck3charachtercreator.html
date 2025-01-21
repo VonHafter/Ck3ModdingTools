@@ -60,6 +60,10 @@
         .lifestyle-container {
             margin-top: 10px;
         }
+        .search-input {
+            margin-bottom: 10px;
+            padding: 10px;
+        }
     </style>
 </head>
 <body>
@@ -95,33 +99,129 @@
     <h2>Lifestyles</h2>
     <div class="lifestyle-container">
         <label for="lifestyle1">Lifestyle 1:</label>
+        <input type="text" class="search-input" id="searchLifestyle1" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle1', 'lifestyle1Options')">
         <select id="lifestyle1" onkeypress="moveFocus(event, 'lifestyle2')">
             <option value="">Select Lifestyle</option>
-            <option value="Diplomat">Diplomat</option>
-            <option value="Scholar">Scholar</option>
-            <option value="Warrior">Warrior</option>
-            <option value="Intrigue">Intrigue</option>
-            <option value="Ruler">Ruler</option>
+            <option value="Lustful">Lustful</option>
+            <option value="Chaste">Chaste</option>
+            <option value="Gluttonous">Gluttonous</option>
+            <option value="Temperate">Temperate</option>
+            <option value="Greedy">Greedy</option>
+            <option value="Generous">Generous</option>
+            <option value="Lazy">Lazy</option>
+            <option value="Diligent">Diligent</option>
+            <option value="Wrathful">Wrathful</option>
+            <option value="Calm">Calm</option>
+            <option value="Patient">Patient</option>
+            <option value="Impatient">Impatient</option>
+            <option value="Arrogant">Arrogant</option>
+            <option value="Humble">Humble</option>
+            <option value="Deceitful">Deceitful</option>
+            <option value="Honest">Honest</option>
+            <option value="Craven">Craven</option>
+            <option value="Brave">Brave</option>
+            <option value="Shy">Shy</option>
+            <option value="Gregarious">Gregarious</option>
+            <option value="Ambitious">Ambitious</option>
+            <option value="Content">Content</option>
+            <option value="Arbitrary">Arbitrary</option>
+            <option value="Just">Just</option>
+            <option value="Cynical">Cynical</option>
+            <option value="Zealous">Zealous</option>
+            <option value="Paranoid">Paranoid</option>
+            <option value="Trusting">Trusting</option>
+            <option value="Compassionate">Compassionate</option>
+            <option value="Callous">Callous</option>
+            <option value="Sadistic">Sadistic</option>
+            <option value="Stubborn">Stubborn</option>
+            <option value="Fickle">Fickle</option>
+            <option value="Vengeful">Vengeful</option>
+            <option value="Forgiving">Forgiving</option>
+            <option value="Eccentric">Eccentric</option>
         </select>
 
         <label for="lifestyle2">Lifestyle 2:</label>
+        <input type="text" class="search-input" id="searchLifestyle2" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle2', 'lifestyle2Options')">
         <select id="lifestyle2" onkeypress="moveFocus(event, 'lifestyle3')">
             <option value="">Select Lifestyle</option>
-            <option value="Diplomat">Diplomat</option>
-            <option value="Scholar">Scholar</option>
-            <option value="Warrior">Warrior</option>
-            <option value="Intrigue">Intrigue</option>
-            <option value="Ruler">Ruler</option>
+            <option value="Lustful">Lustful</option>
+            <option value="Chaste">Chaste</option>
+            <option value="Gluttonous">Gluttonous</option>
+            <option value="Temperate">Temperate</option>
+            <option value="Greedy">Greedy</option>
+            <option value="Generous">Generous</option>
+            <option value="Lazy">Lazy</option>
+            <option value="Diligent">Diligent</option>
+            <option value="Wrathful">Wrathful</option>
+            <option value="Calm">Calm</option>
+            <option value="Patient">Patient</option>
+            <option value="Impatient">Impatient</option>
+            <option value="Arrogant">Arrogant</option>
+            <option value="Humble">Humble</option>
+            <option value="Deceitful">Deceitful</option>
+            <option value="Honest">Honest</option>
+            <option value="Craven">Craven</option>
+            <option value="Brave">Brave</option>
+            <option value="Shy">Shy</option>
+            <option value="Gregarious">Gregarious</option>
+            <option value="Ambitious">Ambitious</option>
+            <option value="Content">Content</option>
+            <option value="Arbitrary">Arbitrary</option>
+            <option value="Just">Just</option>
+            <option value="Cynical">Cynical</option>
+            <option value="Zealous">Zealous</option>
+            <option value="Paranoid">Paranoid</option>
+            <option value="Trusting">Trusting</option>
+            <option value="Compassionate">Compassionate</option>
+            <option value="Callous">Callous</option>
+            <option value="Sadistic">Sadistic</option>
+            <option value="Stubborn">Stubborn</option>
+            <option value="Fickle">Fickle</option>
+            <option value="Vengeful">Vengeful</option>
+            <option value="Forgiving">Forgiving</option>
+            <option value="Eccentric">Eccentric</option>
         </select>
 
         <label for="lifestyle3">Lifestyle 3:</label>
+        <input type="text" class="search-input" id="searchLifestyle3" placeholder="Search Lifestyle" oninput="filterLifestyles('searchLifestyle3', 'lifestyle3Options')">
         <select id="lifestyle3" onkeypress="moveFocus(event, 'fatherSelect')">
             <option value="">Select Lifestyle</option>
-            <option value="Diplomat">Diplomat</option>
-            <option value="Scholar">Scholar</option>
-            <option value="Warrior">Warrior</option>
-            <option value="Intrigue">Intrigue</option>
-            <option value="Ruler">Ruler</option>
+            <option value="Lustful">Lustful</option>
+            <option value="Chaste">Chaste</option>
+            <option value="Gluttonous">Gluttonous</option>
+            <option value="Temperate">Temperate</option>
+            <option value="Greedy">Greedy</option>
+            <option value="Generous">Generous</option>
+            <option value="Lazy">Lazy</option>
+            <option value="Diligent">Diligent</option>
+            <option value="Wrathful">Wrathful</option>
+            <option value="Calm">Calm</option>
+            <option value="Patient">Patient</option>
+            <option value="Impatient">Impatient</option>
+            <option value="Arrogant">Arrogant</option>
+            <option value="Humble">Humble</option>
+            <option value="Deceitful">Deceitful</option>
+            <option value="Honest">Honest</option>
+            <option value="Craven">Craven</option>
+            <option value="Brave">Brave</option>
+            <option value="Shy">Shy</option>
+            <option value="Gregarious">Gregarious</option>
+            <option value="Ambitious">Ambitious</option>
+            <option value="Content">Content</option>
+            <option value="Arbitrary">Arbitrary</option>
+            <option value="Just">Just</option>
+            <option value="Cynical">Cynical</option>
+            <option value="Zealous">Zealous</option>
+            <option value="Paranoid">Paranoid</option>
+            <option value="Trusting">Trusting</option>
+            <option value="Compassionate">Compassionate</option>
+            <option value="Callous">Callous</option>
+            <option value="Sadistic">Sadistic</option>
+            <option value="Stubborn">Stubborn</option>
+            <option value="Fickle">Fickle</option>
+            <option value="Vengeful">Vengeful</option>
+            <option value="Forgiving">Forgiving</option>
+            <option value="Eccentric">Eccentric</option>
         </select>
     </div>
 
@@ -193,6 +293,19 @@
                 }
             });
         });
+
+        function filterLifestyles(searchInputId, selectId) {
+            const input = document.getElementById(searchInputId);
+            const filter = input.value.toLowerCase();
+            const select = document.getElementById(selectId);
+            const options = select.options;
+
+            for (let i = 0; i < options.length; i++) {
+                const option = options[i];
+                const text = option.text.toLowerCase();
+                option.style.display = text.includes(filter) ? "" : "none";
+            }
+        }
 
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
