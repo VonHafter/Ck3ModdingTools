@@ -1,34 +1,36 @@
-- Ambitious
-- Brave
-- Charismatic Negotiator
-- Courageous
-- Diligent
-- Gregarious
-- Hardy
-- Just
-- Kind
-- Loyal
-- Patient
-- Prowess
-- Sage
-- Trustworthy
-- Valiant
-- Arbitrary
-- Deceitful
-- Dull
-- Greedy
-- Haughty
-- Impulsive
-- Lazy
-- Proud
-- Reckless
-- Sadistic
-- Sickly
-- Stubborn
-- Wroth
-- Content
-- Indulgent
-- Intelligent
-- Lustful
-- Temperate
-- Zealous
+lustful
+chaste
+gluttonous
+temperate
+greedy
+generous
+lazy
+diligent
+wrathful
+calm
+patient
+impatient
+arrogant
+humble
+deceitful
+honest
+craven
+brave
+shy
+gregarious
+ambitious
+content
+arbitrary
+just
+cynical
+zealous
+paranoid
+trusting
+compassionte
+callous
+sadistic
+stubborn
+fickle
+vengeful
+forgiving
+eccentric
