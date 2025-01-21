@@ -12,6 +12,7 @@
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
+            background-color: #f9f9f9;
         }
         input[type="text"], input[type="number"], select, textarea {
             width: 100%;
@@ -118,6 +119,7 @@
         let religion = '';
         let culture = '';
         let characters = [];
+        let characterIdCounter = 1; // Start ID counter at 1
 
         document.getElementById('namespace').addEventListener('change', function() {
             namespace = this.value.trim();
@@ -158,9 +160,8 @@
             const deathMonth = document.getElementById('deathMonth').value.trim();
             const deathDay = document.getElementById('deathDay').value.trim();
 
-            const id = characterData.split('\n').filter(line => line.includes('=')).length + 1; // Simple ID generation
-
-            let characterEntry = `${namespace}_${id} = {\n`;
+            // Create character entry with incremented ID
+            let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
             characterEntry += `  name = "${name}"\n`;
             characterEntry += `  female = ${female}\n`;
             characterEntry += `  dynasty = ${document.getElementById('keepDynasty').checked ? dynasty : document.getElementById('dynasty').value.trim()}\n`;
@@ -185,9 +186,12 @@
             characterEntry += `}\n\n`;
 
             characterData += characterEntry;
-            characters.push({ name, female, id }); // Store character for parent selection
+            characters.push({ name, female, id: characterIdCounter }); // Store character for parent selection
             updateParentOptions();
             document.getElementById('output').textContent = characterData;
+
+            // Increment the character ID counter for the next character
+            characterIdCounter++;
 
             // Clear input fields after adding the character
             document.getElementById('name').value = '';
