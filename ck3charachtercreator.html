@@ -57,6 +57,9 @@
             overflow: hidden;
             padding: 10px 0;
         }
+        .lifestyle-container {
+            margin-top: 10px;
+        }
     </style>
 </head>
 <body>
@@ -87,6 +90,39 @@
 
         <label for="culture">Culture:</label>
         <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
+    </div>
+
+    <h2>Lifestyles</h2>
+    <div class="lifestyle-container">
+        <label for="lifestyle1">Lifestyle 1:</label>
+        <select id="lifestyle1" onkeypress="moveFocus(event, 'lifestyle2')">
+            <option value="">Select Lifestyle</option>
+            <option value="Diplomat">Diplomat</option>
+            <option value="Scholar">Scholar</option>
+            <option value="Warrior">Warrior</option>
+            <option value="Intrigue">Intrigue</option>
+            <option value="Ruler">Ruler</option>
+        </select>
+
+        <label for="lifestyle2">Lifestyle 2:</label>
+        <select id="lifestyle2" onkeypress="moveFocus(event, 'lifestyle3')">
+            <option value="">Select Lifestyle</option>
+            <option value="Diplomat">Diplomat</option>
+            <option value="Scholar">Scholar</option>
+            <option value="Warrior">Warrior</option>
+            <option value="Intrigue">Intrigue</option>
+            <option value="Ruler">Ruler</option>
+        </select>
+
+        <label for="lifestyle3">Lifestyle 3:</label>
+        <select id="lifestyle3" onkeypress="moveFocus(event, 'fatherSelect')">
+            <option value="">Select Lifestyle</option>
+            <option value="Diplomat">Diplomat</option>
+            <option value="Scholar">Scholar</option>
+            <option value="Warrior">Warrior</option>
+            <option value="Intrigue">Intrigue</option>
+            <option value="Ruler">Ruler</option>
+        </select>
     </div>
 
     <h2>Parent Selection:</h2>
@@ -174,6 +210,11 @@
             const deathMonth = document.getElementById('deathMonth').value.trim();
             const deathDay = document.getElementById('deathDay').value.trim();
 
+            // Get lifestyles
+            const lifestyle1 = document.getElementById('lifestyle1').value.trim();
+            const lifestyle2 = document.getElementById('lifestyle2').value.trim();
+            const lifestyle3 = document.getElementById('lifestyle3').value.trim();
+
             // Create character entry with incremented ID
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
             characterEntry += `  name = "${name}"\n`;
@@ -181,7 +222,12 @@
             characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
             characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
             characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
-            
+
+            // Add lifestyles
+            if (lifestyle1) characterEntry += `  add_trait = ${lifestyle1}\n`;
+            if (lifestyle2) characterEntry += `  add_trait = ${lifestyle2}\n`;
+            if (lifestyle3) characterEntry += `  add_trait = ${lifestyle3}\n`;
+
             if (father) {
                 characterEntry += `  father = ${father}\n`;
             }
@@ -217,6 +263,9 @@
             document.getElementById('deathYear').value = '';
             document.getElementById('deathMonth').value = '';
             document.getElementById('deathDay').value = '';
+            document.getElementById('lifestyle1').value = '';
+            document.getElementById('lifestyle2').value = '';
+            document.getElementById('lifestyle3').value = '';
         }
 
         function updateParentOptions() {
