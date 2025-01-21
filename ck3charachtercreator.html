@@ -40,8 +40,22 @@
         .date-label {
             display: block;
         }
-        .character-select {
-            margin-bottom: 10px;
+        .collapsible {
+            background-color: #e7f3fe;
+            color: #0056b3;
+            cursor: pointer;
+            padding: 10px;
+            border: none;
+            text-align: left;
+            outline: none;
+            font-size: 16px;
+            margin-top: 10px;
+            border-radius: 4px;
+        }
+        .content {
+            display: none;
+            overflow: hidden;
+            padding: 10px 0;
         }
     </style>
 </head>
@@ -55,34 +69,34 @@
     <h2>Character Details</h2>
 
     <label for="name">Character Name:</label>
-    <input type="text" id="name" placeholder="Enter Character Name" required>
+    <input type="text" id="name" placeholder="Enter Character Name" required onkeypress="moveFocus(event, 'female')">
 
     <label for="female">Female:</label>
-    <select id="female">
+    <select id="female" onkeypress="moveFocus(event, 'dynasty')">
         <option value="yes">Yes</option>
         <option value="no">No</option>
     </select>
 
-    <label for="dynasty">Dynasty ID:</label>
-    <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required>
-    <input type="checkbox" id="keepDynasty" checked> Keep Dynasty on Add
+    <button class="collapsible">Religion, Culture, and Dynasty ID</button>
+    <div class="content">
+        <label for="dynasty">Dynasty ID:</label>
+        <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required onkeypress="moveFocus(event, 'religion')">
+        
+        <label for="religion">Religion:</label>
+        <input type="text" id="religion" placeholder="Enter Religion" required onkeypress="moveFocus(event, 'culture')">
 
-    <label for="religion">Religion:</label>
-    <input type="text" id="religion" placeholder="Enter Religion" required>
-    <input type="checkbox" id="keepReligion" checked> Keep Religion on Add
-
-    <label for="culture">Culture:</label>
-    <input type="text" id="culture" placeholder="Enter Culture" required>
-    <input type="checkbox" id="keepCulture" checked> Keep Culture on Add
+        <label for="culture">Culture:</label>
+        <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
+    </div>
 
     <h2>Parent Selection:</h2>
     <label for="fatherSelect" class="character-select">Father:</label>
-    <select id="fatherSelect">
+    <select id="fatherSelect" onkeypress="moveFocus(event, 'motherSelect')">
         <option value="">Select Father</option>
     </select>
 
     <label for="motherSelect" class="character-select">Mother:</label>
-    <select id="motherSelect">
+    <select id="motherSelect" onkeypress="moveFocus(event, 'birthYear')">
         <option value="">Select Mother</option>
     </select>
 
@@ -125,24 +139,24 @@
             namespace = this.value.trim();
         });
 
-        document.getElementById('dynasty').addEventListener('input', function() {
-            dynasty = this.value.trim();
-        });
-
-        document.getElementById('religion').addEventListener('input', function() {
-            religion = this.value.trim();
-        });
-
-        document.getElementById('culture').addEventListener('input', function() {
-            culture = this.value.trim();
-        });
-
         function moveFocus(event, nextId) {
             if (event.key === 'Enter') {
                 event.preventDefault(); // Prevent form submission
                 document.getElementById(nextId).focus();
             }
         }
+
+        document.querySelectorAll('.collapsible').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle("active");
+                const content = this.nextElementSibling;
+                if (content.style.display === "block") {
+                    content.style.display = "none";
+                } else {
+                    content.style.display = "block";
+                }
+            });
+        });
 
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
@@ -164,9 +178,9 @@
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
             characterEntry += `  name = "${name}"\n`;
             characterEntry += `  female = ${female}\n`;
-            characterEntry += `  dynasty = ${document.getElementById('keepDynasty').checked ? dynasty : document.getElementById('dynasty').value.trim()}\n`;
-            characterEntry += `  religion = ${document.getElementById('keepReligion').checked ? religion : document.getElementById('religion').value.trim()}\n`;
-            characterEntry += `  culture = ${document.getElementById('keepCulture').checked ? culture : document.getElementById('culture').value.trim()}\n`;
+            characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
+            characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
+            characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
             
             if (father) {
                 characterEntry += `  father = ${father}\n`;
