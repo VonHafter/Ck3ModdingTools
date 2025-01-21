@@ -13,7 +13,7 @@
             border: 1px solid #ccc;
             border-radius: 5px;
         }
-        input[type="text"], select, textarea {
+        input[type="text"], input[type="number"], select, textarea {
             width: 100%;
             margin-bottom: 10px;
             padding: 10px;
@@ -36,61 +36,145 @@
 <body>
 
     <h1>CK3 Character Creator</h1>
-    <label for="names">Select Name File (one name per line):</label>
-    <textarea id="names" rows="5" placeholder="Paste names here..."></textarea>
+
+    <label for="namespace">Namespace:</label>
+    <input type="text" id="namespace" placeholder="Enter Namespace" required>
+
+    <h2>Character Details</h2>
+
+    <label for="name">Character Name:</label>
+    <input type="text" id="name" placeholder="Enter Character Name" required>
+
+    <label for="female">Female:</label>
+    <select id="female">
+        <option value="yes">Yes</option>
+        <option value="no">No</option>
+    </select>
 
     <label for="dynasty">Dynasty ID:</label>
-    <input type="text" id="dynasty" placeholder="Enter Dynasty ID">
+    <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required>
+    <input type="checkbox" id="keepDynasty" checked> Keep Dynasty on Add
 
     <label for="religion">Religion:</label>
-    <input type="text" id="religion" placeholder="Enter Religion">
+    <input type="text" id="religion" placeholder="Enter Religion" required>
+    <input type="checkbox" id="keepReligion" checked> Keep Religion on Add
 
     <label for="culture">Culture:</label>
-    <input type="text" id="culture" placeholder="Enter Culture">
+    <input type="text" id="culture" placeholder="Enter Culture" required>
+    <input type="checkbox" id="keepCulture" checked> Keep Culture on Add
 
-    <label for="count">Number of Characters to Generate:</label>
-    <input type="number" id="count" min="1" value="1">
+    <label for="father">Father's ID (or leave blank):</label>
+    <input type="text" id="father" placeholder="Enter Father's Namespace_ID">
 
-    <button onclick="generateCharacter()">Generate Character</button>
+    <label for="mother">Mother's ID (or leave blank):</label>
+    <input type="text" id="mother" placeholder="Enter Mother's Namespace_ID">
+
+    <label for="birthYear">Birth Year:</label>
+    <input type="number" id="birthYear" placeholder="Enter Birth Year" required>
+
+    <label for="birthMonth">Birth Month:</label>
+    <input type="number" id="birthMonth" placeholder="Enter Birth Month (1-12)" min="1" max="12" required>
+
+    <label for="birthDay">Birth Day:</label>
+    <input type="number" id="birthDay" placeholder="Enter Birth Day (1-31)" min="1" max="31" required>
+
+    <label for="deathYear">Death Year:</label>
+    <input type="number" id="deathYear" placeholder="Enter Death Year">
+
+    <label for="deathMonth">Death Month:</label>
+    <input type="number" id="deathMonth" placeholder="Enter Death Month (1-12)" min="1" max="12">
+
+    <label for="deathDay">Death Day:</label>
+    <input type="number" id="deathDay" placeholder="Enter Death Day (1-31)" min="1" max="31">
+
+    <button onclick="addCharacter()">Add Character</button>
     <button onclick="copyToClipboard()">Copy to Clipboard</button>
 
     <h2>Generated Character Data:</h2>
     <pre id="output"></pre>
 
     <script>
-        function generateCharacter() {
-            const names = document.getElementById('names').value.split('\n').filter(name => name.trim() !== '');
-            const dynasty = document.getElementById('dynasty').value;
-            const religion = document.getElementById('religion').value;
-            const culture = document.getElementById('culture').value;
-            const count = parseInt(document.getElementById('count').value);
+        let characterData = '';
+        let namespace = '';
+        let dynasty = '';
+        let religion = '';
+        let culture = '';
 
-            let output = '';
-            for (let i = 0; i < count; i++) {
-                const name = names[Math.floor(Math.random() * names.length)].trim();
-                const id = i + 1; // Simple ID generation
-                const namespace = 'ck3'; // You can customize this
+        document.getElementById('namespace').addEventListener('change', function() {
+            namespace = this.value.trim();
+        });
 
-                output += `${namespace}_${id} = {\n`;
-                output += `  name = "${name}"\n`;
-                output += `  dynasty = ${dynasty}\n`;
-                output += `  religion = ${religion}\n`;
-                output += `  culture = ${culture}\n`;
-                output += `  year.month.day = {\n`;
-                output += `    birth = yes\n`;
-                output += `  }\n`;
-                output += `  year.month.day = {\n`;
-                output += `    death = yes\n`;
-                output += `  }\n`;
-                output += `}\n\n`;
+        document.getElementById('dynasty').addEventListener('input', function() {
+            dynasty = this.value.trim();
+        });
+
+        document.getElementById('religion').addEventListener('input', function() {
+            religion = this.value.trim();
+        });
+
+        document.getElementById('culture').addEventListener('input', function() {
+            culture = this.value.trim();
+        });
+
+        function addCharacter() {
+            const name = document.getElementById('name').value.trim();
+            const female = document.getElementById('female').value;
+            const father = document.getElementById('father').value.trim();
+            const mother = document.getElementById('mother').value.trim();
+
+            // Get birth date
+            const birthYear = document.getElementById('birthYear').value.trim();
+            const birthMonth = document.getElementById('birthMonth').value.trim();
+            const birthDay = document.getElementById('birthDay').value.trim();
+
+            // Get death date
+            const deathYear = document.getElementById('deathYear').value.trim();
+            const deathMonth = document.getElementById('deathMonth').value.trim();
+            const deathDay = document.getElementById('deathDay').value.trim();
+
+            const id = characterData.split('\n').filter(line => line.includes('=')).length + 1; // Simple ID generation
+
+            let characterEntry = `${namespace}_${id} = {\n`;
+            characterEntry += `  name = "${name}"\n`;
+            characterEntry += `  female = ${female}\n`;
+            characterEntry += `  dynasty = ${document.getElementById('keepDynasty').checked ? dynasty : document.getElementById('dynasty').value.trim()}\n`;
+            characterEntry += `  religion = ${document.getElementById('keepReligion').checked ? religion : document.getElementById('religion').value.trim()}\n`;
+            characterEntry += `  culture = ${document.getElementById('keepCulture').checked ? culture : document.getElementById('culture').value.trim()}\n`;
+            
+            if (father) {
+                characterEntry += `  father = ${father}\n`;
+            }
+            if (mother) {
+                characterEntry += `  mother = ${mother}\n`;
             }
 
-            document.getElementById('output').textContent = output;
+            characterEntry += `  ${birthYear}.${birthMonth}.${birthDay} = {\n`;
+            characterEntry += `    birth = yes\n`;
+            characterEntry += `  }\n`;
+            if (deathYear && deathMonth && deathDay) {
+                characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
+                characterEntry += `    death = yes\n`;
+                characterEntry += `  }\n`;
+            }
+            characterEntry += `}\n\n`;
+
+            characterData += characterEntry;
+            document.getElementById('output').textContent = characterData;
+
+            // Clear input fields after adding the character
+            document.getElementById('name').value = '';
+            document.getElementById('father').value = '';
+            document.getElementById('mother').value = '';
+            document.getElementById('birthYear').value = '';
+            document.getElementById('birthMonth').value = '';
+            document.getElementById('birthDay').value = '';
+            document.getElementById('deathYear').value = '';
+            document.getElementById('deathMonth').value = '';
+            document.getElementById('deathDay').value = '';
         }
 
         function copyToClipboard() {
-            const output = document.getElementById('output').textContent;
-            navigator.clipboard.writeText(output).then(() => {
+            navigator.clipboard.writeText(characterData).then(() => {
                 alert('Character data copied to clipboard!');
             }).catch(err => {
                 console.error('Could not copy text: ', err);
