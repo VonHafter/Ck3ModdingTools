@@ -57,8 +57,29 @@
             overflow: hidden;
             padding: 10px 0;
         }
-        .lifestyle-container {
+        .personality-container {
             margin-top: 10px;
+        }
+        .personality-pool {
+            margin-top: 10px;
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+            background-color: #fafafa;
+        }
+        .personality-item {
+            display: inline-block;
+            padding: 5px 10px;
+            margin: 5px;
+            background-color: #e7f3fe;
+            color: #0056b3;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        .personality-item .remove {
+            margin-left: 10px;
+            color: red;
+            cursor: pointer;
         }
     </style>
 </head>
@@ -93,9 +114,9 @@
     </div>
 
     <h2>Personalities</h2>
-    <div class="lifestyle-container">
-        <label for="lifestyle1">Personality 1:</label>
-        <select id="lifestyle1" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'lifestyle2')">
+    <div class="personality-container">
+        <label for="personality-select">Add Personality:</label>
+        <select id="personality-select" onkeypress="moveFocus(event, 'fatherSelect')">
             <option value="">Select Personality</option>
             <option value="Lustful">Lustful</option>
             <option value="Chaste">Chaste</option>
@@ -134,88 +155,11 @@
             <option value="Forgiving">Forgiving</option>
             <option value="Eccentric">Eccentric</option>
         </select>
+        <button onclick="addPersonality()">Add</button>
 
-        <label for="lifestyle2">Personality 2:</label>
-        <select id="lifestyle2" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'lifestyle3')">
-            <option value="">Select Personality</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
-
-        <label for="lifestyle3">Personality 3:</label>
-        <select id="lifestyle3" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'fatherSelect')">
-            <option value="">Select Personality</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
+        <div class="personality-pool" id="personality-pool">
+            <!-- Selected personalities will appear here -->
+        </div>
     </div>
 
     <h2>Parent Selection:</h2>
@@ -326,18 +270,35 @@
             });
         });
 
-        function handlePersonalityChange(selectElement) {
+        function addPersonality() {
+            const selectElement = document.getElementById('personality-select');
             const selectedValue = selectElement.value;
-            const conflictValue = personalityConflicts[selectedValue];
+            if (!selectedValue) return;
 
-            document.querySelectorAll('.lifestyle-container select').forEach(select => {
-                if (select !== selectElement) {
-                    select.querySelectorAll('option').forEach(option => {
-                        if (option.value === conflictValue) {
-                            option.disabled = !!selectedValue;
-                        }
-                    });
-                }
+            const pool = document.getElementById('personality-pool');
+            const personalityItem = document.createElement('div');
+            personalityItem.classList.add('personality-item');
+            personalityItem.textContent = selectedValue;
+
+            const removeButton = document.createElement('span');
+            removeButton.classList.add('remove');
+            removeButton.textContent = 'x';
+            removeButton.onclick = function() {
+                personalityItem.remove();
+                updatePersonalityOptions();
+            };
+
+            personalityItem.appendChild(removeButton);
+            pool.appendChild(personalityItem);
+
+            selectElement.value = '';
+            updatePersonalityOptions();
+        }
+
+        function updatePersonalityOptions() {
+            const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
+            document.querySelectorAll('#personality-select option').forEach(option => {
+                option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
             });
         }
 
@@ -357,10 +318,8 @@
             const deathMonth = document.getElementById('deathMonth').value.trim();
             const deathDay = document.getElementById('deathDay').value.trim();
 
-            // Get lifestyles
-            const lifestyle1 = document.getElementById('lifestyle1').value.trim();
-            const lifestyle2 = document.getElementById('lifestyle2').value.trim();
-            const lifestyle3 = document.getElementById('lifestyle3').value.trim();
+            // Get selected personalities
+            const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
 
             // Create character entry with incremented ID
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
@@ -370,10 +329,10 @@
             characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
             characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
 
-            // Add lifestyles
-            if (lifestyle1) characterEntry += `  add_trait = ${lifestyle1}\n`;
-            if (lifestyle2) characterEntry += `  add_trait = ${lifestyle2}\n`;
-            if (lifestyle3) characterEntry += `  add_trait = ${lifestyle3}\n`;
+            // Add personalities
+            selectedPersonalities.forEach(personality => {
+                characterEntry += `  add_trait = ${personality}\n`;
+            });
 
             if (father) {
                 characterEntry += `  father = ${father}\n`;
@@ -410,9 +369,8 @@
             document.getElementById('deathYear').value = '';
             document.getElementById('deathMonth').value = '';
             document.getElementById('deathDay').value = '';
-            document.getElementById('lifestyle1').value = '';
-            document.getElementById('lifestyle2').value = '';
-            document.getElementById('lifestyle3').value = '';
+            document.getElementById('personality-select').value = '';
+            document.getElementById('personality-pool').innerHTML = '';
         }
 
         function updateParentOptions() {
