@@ -120,36 +120,46 @@
     <script>
         function parseCharacterData(data) {
             const characters = {};
+            const regex = /(\w+_\d+) = \{\s*([^}]+)\s*\}/g;
+            let match;
+
+            while ((match = regex.exec(data)) !== null) {
+                const charId = match[1];
+                const charData = match[2];
+                characters[charId] = parseCharacterAttributes(charId, charData);
+            }
+
+            return characters;
+        }
+
+        function parseCharacterAttributes(charId, data) {
+            const character = { traits: [] };
             const lines = data.split('\n');
-            let currentCharacter = null;
 
             lines.forEach(line => {
-                if (line.includes('= {')) {
-                    const parts = line.split(' ');
-                    currentCharacter = parts[0].trim();
-                    characters[currentCharacter] = { traits: [] };
-                } else if (line.includes('name =')) {
-                    characters[currentCharacter].name = line.split('=')[1].trim().replace(/"/g, '');
-                } else if (line.includes('female =')) {
-                    characters[currentCharacter].female = line.split('=')[1].trim();
-                } else if (line.includes('father =')) {
-                    characters[currentCharacter].father = line.split('=')[1].trim();
-                } else if (line.includes('mother =')) {
-                    characters[currentCharacter].mother = line.split('=')[1].trim();
+                line = line.trim();
+                if (line.startsWith('name =')) {
+                    character.name = line.split('=')[1].trim().replace(/"/g, '');
+                } else if (line.startsWith('female =')) {
+                    character.female = line.split('=')[1].trim();
+                } else if (line.startsWith('father =')) {
+                    character.father = line.split('=')[1].trim();
+                } else if (line.startsWith('mother =')) {
+                    character.mother = line.split('=')[1].trim();
                 } else if (line.includes('birth = yes')) {
                     const dateLine = lines[lines.indexOf(line) - 1];
                     const dateParts = dateLine.split('.');
-                    characters[currentCharacter].birth = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+                    character.birth = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
                 } else if (line.includes('death = yes')) {
                     const dateLine = lines[lines.indexOf(line) - 1];
                     const dateParts = dateLine.split('.');
-                    characters[currentCharacter].death = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
-                } else if (line.includes('add_trait =')) {
-                    characters[currentCharacter].traits.push(line.split('=')[1].trim());
+                    character.death = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+                } else if (line.startsWith('add_trait =')) {
+                    character.traits.push(line.split('=')[1].trim());
                 }
             });
 
-            return characters;
+            return character;
         }
 
         function buildFamilyTree(characters) {
