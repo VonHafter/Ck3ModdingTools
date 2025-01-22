@@ -1,0 +1,112 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Family Tree Generator</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            max-width: 600px;
+            margin: 20px auto;
+            padding: 20px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            background-color: #f9f9f9;
+        }
+        input[type="file"] {
+            margin-bottom: 10px;
+        }
+        button {
+            padding: 10px 15px;
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+        button:hover {
+            background-color: #4cae4c;
+        }
+        h2 {
+            margin-top: 20px;
+        }
+        #family-tree {
+            margin-top: 20px;
+        }
+        ul {
+            list-style-type: none;
+        }
+    </style>
+</head>
+<body>
+    <h1>Family Tree Generator</h1>
+    <input type="file" id="fileInput" accept=".txt">
+    <button onclick="generateTree()">Generate Tree</button>
+
+    <h2>Family Tree:</h2>
+    <div id="family-tree"></div>
+
+    <script>
+        function generateTree() {
+            const fileInput = document.getElementById('fileInput');
+            const file = fileInput.files[0];
+            if (!file) {
+                alert('Please select a file.');
+                return;
+            }
+
+            const reader = new FileReader();
+            reader.onload = function(event) {
+                const content = event.target.result;
+                const characters = parseCharacters(content);
+                const root = characters.find(character => !character.father && !character.mother);
+                if (root) {
+                    const treeContainer = document.getElementById('family-tree');
+                    treeContainer.innerHTML = ''; // Clear previous tree
+                    const tree = document.createElement('ul');
+                    buildTree(root, tree, characters);
+                    treeContainer.appendChild(tree);
+                }
+            };
+            reader.readAsText(file);
+        }
+
+        function parseCharacters(content) {
+            const characterBlocks = content.split('\n\n');
+            const characters = [];
+            characterBlocks.forEach(block => {
+                const lines = block.split('\n');
+                const character = {};
+                lines.forEach(line => {
+                    const [key, value] = line.split(' = ');
+                    if (key && value) {
+                        character[key.trim()] = value.replace(/["{}]/g, '').trim();
+                    }
+                });
+                characters.push({
+                    id: character.name.replace(/"/g, ''),
+                    name: character.name.replace(/"/g, ''),
+                    father: character.father ? character.father.replace(/"/g, '') : null,
+                    mother: character.mother ? character.mother.replace(/"/g, '') : null
+                });
+            });
+            return characters;
+        }
+
+        function buildTree(character, parentElement, characters) {
+            const li = document.createElement('li');
+            li.textContent = character.name;
+
+            const children = characters.filter(c => c.father === character.id || c.mother === character.id);
+            if (children.length > 0) {
+                const ul = document.createElement('ul');
+                children.forEach(child => buildTree(child, ul, characters));
+                li.appendChild(ul);
+            }
+
+            parentElement.appendChild(li);
+        }
+    </script>
+</body>
+</html>
