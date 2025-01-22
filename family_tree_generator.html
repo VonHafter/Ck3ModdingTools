@@ -60,13 +60,15 @@
             reader.onload = function(event) {
                 const content = event.target.result;
                 const characters = parseCharacters(content);
-                const root = characters.find(character => !character.father && !character.mother);
-                if (root) {
+                const roots = characters.filter(character => !character.father && !character.mother);
+                if (roots.length > 0) {
                     const treeContainer = document.getElementById('family-tree');
                     treeContainer.innerHTML = ''; // Clear previous tree
-                    const tree = document.createElement('ul');
-                    buildTree(root, tree, characters);
-                    treeContainer.appendChild(tree);
+                    roots.forEach(root => {
+                        const tree = document.createElement('ul');
+                        buildTree(root, tree, characters);
+                        treeContainer.appendChild(tree);
+                    });
                 }
             };
             reader.readAsText(file);
@@ -89,11 +91,20 @@
                     name: character.name.replace(/\"/g, ''),
                     father: character.father ? character.father.replace(/\"/g, '') : null,
                     mother: character.mother ? character.mother.replace(/\"/g, '') : null,
-                    birth: character.birth,
-                    death: character.death
+                    birth: getEventDate(character, 'birth'),
+                    death: getEventDate(character, 'death')
                 });
             });
             return characters;
+        }
+
+        function getEventDate(character, event) {
+            for (const key in character) {
+                if (character[key] === event) {
+                    return key;
+                }
+            }
+            return null;
         }
 
         function buildTree(character, parentElement, characters) {
