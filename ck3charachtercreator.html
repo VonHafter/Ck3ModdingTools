@@ -92,11 +92,11 @@
         <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
     </div>
 
-    <h2>Lifestyles</h2>
+    <h2>Personalities</h2>
     <div class="lifestyle-container">
-        <label for="lifestyle1">Lifestyle 1:</label>
-        <select id="lifestyle1" onkeypress="moveFocus(event, 'lifestyle2')">
-            <option value="">Select Lifestyle</option>
+        <label for="lifestyle1">Personality 1:</label>
+        <select id="lifestyle1" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'lifestyle2')">
+            <option value="">Select Personality</option>
             <option value="Lustful">Lustful</option>
             <option value="Chaste">Chaste</option>
             <option value="Gluttonous">Gluttonous</option>
@@ -135,9 +135,9 @@
             <option value="Eccentric">Eccentric</option>
         </select>
 
-        <label for="lifestyle2">Lifestyle 2:</label>
-        <select id="lifestyle2" onkeypress="moveFocus(event, 'lifestyle3')">
-            <option value="">Select Lifestyle</option>
+        <label for="lifestyle2">Personality 2:</label>
+        <select id="lifestyle2" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'lifestyle3')">
+            <option value="">Select Personality</option>
             <option value="Lustful">Lustful</option>
             <option value="Chaste">Chaste</option>
             <option value="Gluttonous">Gluttonous</option>
@@ -176,9 +176,9 @@
             <option value="Eccentric">Eccentric</option>
         </select>
 
-        <label for="lifestyle3">Lifestyle 3:</label>
-        <select id="lifestyle3" onkeypress="moveFocus(event, 'fatherSelect')">
-            <option value="">Select Lifestyle</option>
+        <label for="lifestyle3">Personality 3:</label>
+        <select id="lifestyle3" onchange="handlePersonalityChange(this)" onkeypress="moveFocus(event, 'fatherSelect')">
+            <option value="">Select Personality</option>
             <option value="Lustful">Lustful</option>
             <option value="Chaste">Chaste</option>
             <option value="Gluttonous">Gluttonous</option>
@@ -256,6 +256,45 @@
     <pre id="output"></pre>
 
     <script>
+        const personalityConflicts = {
+            'Lustful': 'Chaste',
+            'Chaste': 'Lustful',
+            'Gluttonous': 'Temperate',
+            'Temperate': 'Gluttonous',
+            'Greedy': 'Generous',
+            'Generous': 'Greedy',
+            'Lazy': 'Diligent',
+            'Diligent': 'Lazy',
+            'Wrathful': 'Calm',
+            'Calm': 'Wrathful',
+            'Patient': 'Impatient',
+            'Impatient': 'Patient',
+            'Arrogant': 'Humble',
+            'Humble': 'Arrogant',
+            'Deceitful': 'Honest',
+            'Honest': 'Deceitful',
+            'Craven': 'Brave',
+            'Brave': 'Craven',
+            'Shy': 'Gregarious',
+            'Gregarious': 'Shy',
+            'Ambitious': 'Content',
+            'Content': 'Ambitious',
+            'Arbitrary': 'Just',
+            'Just': 'Arbitrary',
+            'Cynical': 'Zealous',
+            'Zealous': 'Cynical',
+            'Paranoid': 'Trusting',
+            'Trusting': 'Paranoid',
+            'Compassionate': 'Callous',
+            'Callous': 'Compassionate',
+            'Sadistic': 'Forgiving',
+            'Forgiving': 'Sadistic',
+            'Stubborn': 'Fickle',
+            'Fickle': 'Stubborn',
+            'Vengeful': 'Forgiving',
+            'Forgiving': 'Vengeful'
+        };
+
         let characterData = '';
         let namespace = '';
         let dynasty = '';
@@ -286,6 +325,21 @@
                 }
             });
         });
+
+        function handlePersonalityChange(selectElement) {
+            const selectedValue = selectElement.value;
+            const conflictValue = personalityConflicts[selectedValue];
+
+            document.querySelectorAll('.lifestyle-container select').forEach(select => {
+                if (select !== selectElement) {
+                    select.querySelectorAll('option').forEach(option => {
+                        if (option.value === conflictValue) {
+                            option.disabled = !!selectedValue;
+                        }
+                    });
+                }
+            });
+        }
 
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
