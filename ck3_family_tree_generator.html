@@ -3,18 +3,18 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>CK3 Character Creator</title>
+    <title>Family Tree Generator</title>
     <style>
         body {
             font-family: Arial, sans-serif;
-            max-width: 600px;
+            max-width: 800px;
             margin: 20px auto;
             padding: 20px;
             border: 1px solid #ccc;
             border-radius: 5px;
             background-color: #f9f9f9;
         }
-        input[type="text"], input[type="number"], select, textarea {
+        input[type="text"], textarea {
             width: 100%;
             margin-bottom: 10px;
             padding: 10px;
@@ -32,394 +32,169 @@
         button:hover {
             background-color: #4cae4c;
         }
-        .date-box {
-            display: inline-block;
-            width: 30%;
-            margin-right: 5%;
+        .tree {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            margin-top: 20px;
         }
-        .date-label {
-            display: block;
+        .tree ul {
+            padding-top: 20px;
+            position: relative;
+            transition: all 0.5s;
+            display: flex;
+            justify-content: center;
         }
-        .collapsible {
+        .tree li {
+            list-style-type: none;
+            text-align: center;
+            position: relative;
+            padding: 20px 5px 0 5px;
+            transition: all 0.5s;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+        .tree li::before, .tree li::after {
+            content: '';
+            position: absolute;
+            top: 0;
+            right: 50%;
+            border-top: 2px solid #ccc;
+            width: 50%;
+            height: 20px;
+        }
+        .tree li::after {
+            right: auto;
+            left: 50%;
+            border-left: 2px solid #ccc;
+        }
+        .tree li:only-child::after, .tree li:only-child::before {
+            display: none;
+        }
+        .tree li:only-child {
+            padding-top: 0;
+        }
+        .tree li:first-child::before, .tree li:last-child::after {
+            border: 0 none;
+        }
+        .tree li:last-child::before {
+            border-right: 2px solid #ccc;
+            border-radius: 0 5px 0 0;
+        }
+        .tree li:first-child::after {
+            border-radius: 5px 0 0 0;
+        }
+        .tree ul ul::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 50%;
+            border-left: 2px solid #ccc;
+            width: 0;
+            height: 20px;
+        }
+        .tree li div {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 5px;
             background-color: #e7f3fe;
             color: #0056b3;
-            cursor: pointer;
-            padding: 10px;
-            border: none;
-            text-align: left;
-            outline: none;
-            font-size: 16px;
-            margin-top: 10px;
-            border-radius: 4px;
+            position: relative;
         }
-        .content {
-            display: none;
-            overflow: hidden;
-            padding: 10px 0;
-        }
-        .lifestyle-container {
-            margin-top: 10px;
+        .tree li div span {
+            display: block;
         }
     </style>
 </head>
 <body>
 
-    <h1>CK3 Character Creator</h1>
+    <h1>Family Tree Generator</h1>
 
-    <label for="namespace">Namespace:</label>
-    <input type="text" id="namespace" placeholder="Enter Namespace" required>
+    <label for="character-data">Paste Character Data:</label>
+    <textarea id="character-data" placeholder="Paste character data here..." rows="10" required></textarea>
+    <button onclick="generateFamilyTree()">Generate Family Tree</button>
 
-    <h2>Character Details</h2>
-
-    <label for="name">Character Name:</label>
-    <input type="text" id="name" placeholder="Enter Character Name" required onkeypress="moveFocus(event, 'female')">
-
-    <label for="female">Female:</label>
-    <select id="female" onkeypress="moveFocus(event, 'dynasty')">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
-    </select>
-
-    <button class="collapsible">Religion, Culture, and Dynasty ID</button>
-    <div class="content">
-        <label for="dynasty">Dynasty ID:</label>
-        <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required onkeypress="moveFocus(event, 'religion')">
-        
-        <label for="religion">Religion:</label>
-        <input type="text" id="religion" placeholder="Enter Religion" required onkeypress="moveFocus(event, 'culture')">
-
-        <label for="culture">Culture:</label>
-        <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
-    </div>
-
-    <h2>Lifestyles</h2>
-    <div class="lifestyle-container">
-        <label for="lifestyle1">Lifestyle 1:</label>
-        <select id="lifestyle1" onkeypress="moveFocus(event, 'lifestyle2')">
-            <option value="">Select Lifestyle</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
-
-        <label for="lifestyle2">Lifestyle 2:</label>
-        <select id="lifestyle2" onkeypress="moveFocus(event, 'lifestyle3')">
-            <option value="">Select Lifestyle</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
-
-        <label for="lifestyle3">Lifestyle 3:</label>
-        <select id="lifestyle3" onkeypress="moveFocus(event, 'fatherSelect')">
-            <option value="">Select Lifestyle</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
-    </div>
-
-    <h2>Parent Selection:</h2>
-    <label for="fatherSelect" class="character-select">Father:</label>
-    <select id="fatherSelect" onkeypress="moveFocus(event, 'motherSelect')">
-        <option value="">Select Father</option>
-    </select>
-
-    <label for="motherSelect" class="character-select">Mother:</label>
-    <select id="motherSelect" onkeypress="moveFocus(event, 'birthYear')">
-        <option value="">Select Mother</option>
-    </select>
-
-    <h2>Birth Info:</h2>
-    <div>
-        <label class="date-label">Birth Year:</label>
-        <input type="number" class="date-box" id="birthYear" placeholder="Year" required onkeypress="moveFocus(event, 'birthMonth')">
-        <label class="date-label">Birth Month:</label>
-        <input type="number" class="date-box" id="birthMonth" placeholder="Month" min="1" max="12" required onkeypress="moveFocus(event, 'birthDay')">
-        <label class="date-label">Birth Day:</label>
-        <input type="number" class="date-box" id="birthDay" placeholder="Day" min="1" max="31" required>
-    </div>
-
-    <h2>Death Info:</h2>
-    <div>
-        <label class="date-label">Death Year:</label>
-        <input type="number" class="date-box" id="deathYear" placeholder="Year" onkeypress="moveFocus(event, 'deathMonth')">
-        <label class="date-label">Death Month:</label>
-        <input type="number" class="date-box" id="deathMonth" placeholder="Month" min="1" max="12" onkeypress="moveFocus(event, 'deathDay')">
-        <label class="date-label">Death Day:</label>
-        <input type="number" class="date-box" id="deathDay" placeholder="Day" min="1" max="31">
-    </div>
-
-    <button onclick="addCharacter()">Add Character</button>
-    <button onclick="copyToClipboard()">Copy to Clipboard</button>
-    <button onclick="openFamilyTree()">View Family Tree</button>
-
-    <h2>Generated Character Data:</h2>
-    <pre id="output"></pre>
+    <div id="family-tree" class="tree"></div>
 
     <script>
-        let characterData = '';
-        let namespace = '';
-        let characters = [];
-        let characterIdCounter = 1; // Start ID counter at 1
+        function parseCharacterData(data) {
+            const characters = {};
+            const lines = data.split('\n');
+            let currentCharacter = null;
 
-        document.getElementById('namespace').addEventListener('change', function() {
-            namespace = this.value.trim();
-        });
-
-        function moveFocus(event, nextId) {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById(nextId).focus();
-            }
-        }
-
-        function addCharacter() {
-            const name = document.getElementById('name').value.trim();
-            const female = document.getElementById('female').value;
-            const father = document.getElementById('fatherSelect').value;
-            const mother = document.getElementById('motherSelect').value;
-
-            // Get birth date
-            const birthYear = document.getElementById('birthYear').value.trim();
-            const birthMonth = document.getElementById('birthMonth').value.trim();
-            const birthDay = document.getElementById('birthDay').value.trim();
-
-            // Get death date
-            const deathYear = document.getElementById('deathYear').value.trim();
-            const deathMonth = document.getElementById('deathMonth').value.trim();
-            const deathDay = document.getElementById('deathDay').value.trim();
-
-            // Create character entry with incremented ID
-            let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
-            characterEntry += `  name = "${name}"\n`;
-            characterEntry += `  female = ${female}\n`;
-            characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
-            characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
-            characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
-
-            characterEntry += `  ${birthYear}.${birthMonth}.${birthDay} = {\n`;
-            characterEntry += `    birth = yes\n`;
-            characterEntry += `  }\n`;
-            if (deathYear && deathMonth && deathDay) {
-                characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
-                characterEntry += `    death = yes\n`;
-                characterEntry += `  }\n`;
-            }
-            characterEntry += `}\n\n`;
-
-            characterData += characterEntry;
-            characters.push({ name, female, father, mother, birthYear, deathYear, id: characterIdCounter }); // Store character for parent selection
-            updateParentOptions();
-            document.getElementById('output').textContent = characterData;
-
-            // Increment the character ID counter for the next character
-            characterIdCounter++;
-
-            // Clear input fields after adding the character
-            document.getElementById('name').value = '';
-            document.getElementById('fatherSelect').value = '';
-            document.getElementById('motherSelect').value = '';
-            document.getElementById('birthYear').value = '';
-            document.getElementById('birthMonth').value = '';
-            document.getElementById('birthDay').value = '';
-            document.getElementById('deathYear').value = '';
-            document.getElementById('deathMonth').value = '';
-            document.getElementById('deathDay').value = '';
-            document.getElementById('lifestyle1').value = '';
-            document.getElementById('lifestyle2').value = '';
-            document.getElementById('lifestyle3').value = '';
-        }
-
-        function updateParentOptions() {
-            const fatherSelect = document.getElementById('fatherSelect');
-            const motherSelect = document.getElementById('motherSelect');
-
-            fatherSelect.innerHTML = '<option value="">Select Father</option>'; // Reset options
-            motherSelect.innerHTML = '<option value="">Select Mother</option>'; // Reset options
-
-            characters.forEach(character => {
-                const option = new Option(character.name, character.name);
-                if (character.female === "no") { // Male character
-                    fatherSelect.add(option);
-                } else { // Female character
-                    motherSelect.add(option);
+            lines.forEach(line => {
+                if (line.includes('= {')) {
+                    const parts = line.split(' ');
+                    currentCharacter = parts[0].trim();
+                    characters[currentCharacter] = { traits: [] };
+                } else if (line.includes('name =')) {
+                    characters[currentCharacter].name = line.split('=')[1].trim().replace(/"/g, '');
+                } else if (line.includes('female =')) {
+                    characters[currentCharacter].female = line.split('=')[1].trim();
+                } else if (line.includes('father =')) {
+                    characters[currentCharacter].father = line.split('=')[1].trim();
+                } else if (line.includes('mother =')) {
+                    characters[currentCharacter].mother = line.split('=')[1].trim();
+                } else if (line.includes('birth = yes')) {
+                    const dateLine = lines[lines.indexOf(line) - 1];
+                    const dateParts = dateLine.split('.');
+                    characters[currentCharacter].birth = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+                } else if (line.includes('death = yes')) {
+                    const dateLine = lines[lines.indexOf(line) - 1];
+                    const dateParts = dateLine.split('.');
+                    characters[currentCharacter].death = `${dateParts[2]}.${dateParts[1]}.${dateParts[0]}`;
+                } else if (line.includes('add_trait =')) {
+                    characters[currentCharacter].traits.push(line.split('=')[1].trim());
                 }
             });
+
+            return characters;
         }
 
-        function copyToClipboard() {
-            navigator.clipboard.writeText(characterData).then(() => {
-                alert('Character data copied to clipboard!');
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
+        function buildFamilyTree(characters) {
+            const roots = Object.values(characters).filter(char => !char.father && !char.mother);
+            const tree = roots.map(root => buildTreeNode(root, characters));
+            return tree;
         }
 
-        function openFamilyTree() {
-            const familyWindow = window.open('', 'Family Tree', 'width=800,height=600');
-            familyWindow.document.write('<!DOCTYPE html><html lang="en"><head><meta charset="UTF-8"><title>Family Tree</title><style>body{font-family:Arial,sans-serif;max-width:800px;margin:20px auto;padding:20px;border:1px solid #ccc;border-radius:5px;background-color:#f9f9f9;} .tree{display:flex;flex-direction:column;align-items:center;margin:20px 0;} .node{margin:10px;padding:10px;border:1px solid #333;border-radius:5px;position:relative;text-align:center;} .children{display:flex;justify-content:space-around;width:100%;} .line{position:absolute;width:2px;background-color:#333;top:0;left:50%;transform:translateX(-50%);}</style></head><body><h1>Family Tree</h1><div id="treeContainer" class="tree"></div><script>');
+        function buildTreeNode(character, characters) {
+            const children = Object.values(characters).filter(char => char.father === character.name || char.mother === character.name);
+            const childNodes = children.map(child => buildTreeNode(child, characters));
 
-            // Create family tree building logic
-            familyWindow.document.write(`
-                const characters = ${JSON.stringify(characters)};
-                const treeContainer = document.getElementById('treeContainer');
+            return {
+                name: character.name,
+                birth: character.birth,
+                death: character.death,
+                children: childNodes
+            };
+        }
 
-                function renderFamilyTree() {
-                    treeContainer.innerHTML = ''; // Clear previous tree
-                    const rootNodes = {};
+        function renderTree(nodes) {
+            if (!nodes.length) return '';
 
-                    // Create nodes for each family member
-                    for (const member of characters) {
-                        const { name, birthYear, deathYear, father, mother } = member;
-                        const node = document.createElement('div');
-                        node.classList.add('node');
-                        node.innerHTML = \`\${name}<br>\${birthYear} - \${deathYear || 'N/A'}\`;
+            return `
+                <ul>
+                    ${nodes.map(node => `
+                        <li>
+                            <div>
+                                <span>Name: ${node.name}</span>
+                                <span>Birth: ${node.birth}</span>
+                                <span>Death: ${node.death}</span>
+                            </div>
+                            ${renderTree(node.children)}
+                        </li>
+                    `).join('')}
+                </ul>
+            `;
+        }
 
-                        if (!father && !mother) {
-                            // If no parents, it's a root node
-                            treeContainer.appendChild(node);
-                            rootNodes[name] = node;
-                        } else {
-                            // If the member has parents, append to the first parent
-                            if (father) {
-                                let parentNode = Array.from(treeContainer.children).find(child => child.innerHTML.includes(father));
-                                if (parentNode) {
-                                    const childrenContainer = parentNode.querySelector('.children') || document.createElement('div');
-                                    childrenContainer.classList.add('children');
-                                    childrenContainer.appendChild(node);
-                                    parentNode.appendChild(childrenContainer);
-                                    drawLine(parentNode, node);
-                                }
-                            }
-                            if (mother) {
-                                let parentNode = Array.from(treeContainer.children).find(child => child.innerHTML.includes(mother));
-                                if (parentNode) {
-                                    const childrenContainer = parentNode.querySelector('.children') || document.createElement('div');
-                                    childrenContainer.classList.add('children');
-                                    childrenContainer.appendChild(node);
-                                    parentNode.appendChild(childrenContainer);
-                                    drawLine(parentNode, node);
-                                }
-                            }
-                        }
-                    }
-                }
-
-                function drawLine(parentNode, childNode) {
-                    const line = document.createElement('div');
-                    line.classList.add('line');
-                    const parentRect = parentNode.getBoundingClientRect();
-                    const childRect = childNode.getBoundingClientRect();
-                    const lineHeight = childRect.top - parentRect.bottom;
-
-                    line.style.height = \`\${lineHeight}px\`;
-                    parentNode.appendChild(line);
-                }
-
-                renderFamilyTree();
-            `);
-            familyWindow.document.write('</script></body></html>');
-            familyWindow.document.close();
+        function generateFamilyTree() {
+            const data = document.getElementById('character-data').value;
+            const characters = parseCharacterData(data);
+            const tree = buildFamilyTree(characters);
+            const treeHTML = renderTree(tree);
+            document.getElementById('family-tree').innerHTML = treeHTML;
         }
     </script>
 
