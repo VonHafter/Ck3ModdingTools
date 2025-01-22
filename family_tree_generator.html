@@ -81,14 +81,16 @@
                 lines.forEach(line => {
                     const [key, value] = line.split(' = ');
                     if (key && value) {
-                        character[key.trim()] = value.replace(/["{}]/g, '').trim();
+                        character[key.trim()] = value.replace(/[\"{}]/g, '').trim();
                     }
                 });
                 characters.push({
-                    id: character.name.replace(/"/g, ''),
-                    name: character.name.replace(/"/g, ''),
-                    father: character.father ? character.father.replace(/"/g, '') : null,
-                    mother: character.mother ? character.mother.replace(/"/g, '') : null
+                    id: character.name.replace(/\"/g, ''),
+                    name: character.name.replace(/\"/g, ''),
+                    father: character.father ? character.father.replace(/\"/g, '') : null,
+                    mother: character.mother ? character.mother.replace(/\"/g, '') : null,
+                    birth: character.birth,
+                    death: character.death
                 });
             });
             return characters;
@@ -96,7 +98,7 @@
 
         function buildTree(character, parentElement, characters) {
             const li = document.createElement('li');
-            li.textContent = character.name;
+            li.textContent = `${character.name} (Birth: ${character.birth}, Death: ${character.death})`;
 
             const children = characters.filter(c => c.father === character.id || c.mother === character.id);
             if (children.length > 0) {
