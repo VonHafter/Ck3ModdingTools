@@ -81,6 +81,22 @@
             color: red;
             cursor: pointer;
         }
+        .autocomplete-suggestions {
+            border: 1px solid #ccc;
+            background: #fff;
+            max-height: 150px;
+            overflow-y: auto;
+            position: absolute;
+            z-index: 1000;
+            width: 100%;
+        }
+        .autocomplete-suggestion {
+            padding: 10px;
+            cursor: pointer;
+        }
+        .autocomplete-suggestion:hover {
+            background: #e9e9e9;
+        }
     </style>
 </head>
 <body>
@@ -111,6 +127,7 @@
 
         <label for="culture">Culture:</label>
         <input type="text" id="culture" placeholder="Enter Culture" required>
+        <div id="culture-suggestions" class="autocomplete-suggestions"></div>
     </div>
 
     <button class="collapsible">Traits Selection</button>
@@ -554,6 +571,58 @@
         });
         document.getElementById('deathDay').addEventListener('input', function() {
             if (this.value > 31) this.value = 31;
+        });
+
+        const cultures = [
+            "akan", "guan", "kru", "bedouin", "egyptian", "maghrebi", "levantine", "yemeni", "latgalian", "lithuanian",
+            "prussian", "estonian", "finnish", "karelian", "sami", "vepsian", "east bantu", "baranis", "butr", "guanche",
+            "zaghawa", "breton", "cornish", "cumbrian", "pictish", "welsh", "burmese", "mon", "alan", "armenian", "georgian",
+            "greek", "assyrian", "hausa", "kanuri", "nupe", "sao", "bavarian", "dutch", "franconian", "frisian", "german",
+            "langobard", "saxon", "swabian", "han", "gond", "kannada", "tamil", "telugu", "daju", "ethiopian", "nubian",
+            "welayta", "ilmenian", "russian", "severian", "volhynian", "frankish", "french", "norman", "occitan", "gaelic",
+            "irish", "bobo", "gur", "malinke", "marka", "mel", "afar", "beja", "somali", "andalusian", "aragonese",
+            "asturleonese", "basque", "castilian", "catalan", "galician", "portuguese", "suebi", "visigothic", "bengali",
+            "brahui", "gujarati", "assamese", "hindustani", "kashmiri", "malvi", "marathi", "nepali", "oriya", "punjabi",
+            "rajput", "sindhi", "sinhala", "afghan", "baloch", "daylamite", "khwarezmian", "kurdish", "persian", "saka",
+            "sogdian", "tajik", "ashkenazi", "bavlim", "hebrew", "kochinim", "radhanite", "sephardi", "cisalpine", "italian",
+            "lombard", "sardinian", "sicilian", "hungarian", "mogyer", "buryat", "jurchen", "kerait", "khitan", "mongol",
+            "naiman", "oirat", "ongud", "tuyuhun", "edo", "ewe", "igbo", "yoruba", "danish", "norse", "norwegian", "swedish",
+            "qiang", "tangut", "bozo", "gaw", "mossi", "songhai", "soninke", "sorko", "pulaar", "serer", "wolof", "bosnian",
+            "bulgarian", "croatian", "serbian", "bodpa", "kirati", "lhomon", "sumpa", "tsangpa", "zhangzhung", "tocharian",
+            "avar", "bashkir", "bolghar", "chuvash", "cuman", "karluk", "khazar", "kimek", "kipchak", "kirghiz", "laktan",
+            "turkish", "pecheneg", "shatuo", "uriankhai", "uyghur", "yughur", "samoyed", "khanty", "komi", "vlach", "mari",
+            "merya", "meshchera", "mordvin", "muroma", "anglo-saxon", "english", "old saxon", "scottish", "carantanian",
+            "czech", "polabian", "polish", "pommeranian", "slovien", "ancient egyptian", "gothic", "hunnic", "macedonian",
+            "roman", "trojan"
+        ];
+
+        document.getElementById('culture').addEventListener('input', function() {
+            const input = this.value.toLowerCase();
+            const suggestions = cultures.filter(culture => culture.startsWith(input));
+            const suggestionsContainer = document.getElementById('culture-suggestions');
+            suggestionsContainer.innerHTML = '';
+            suggestions.forEach(suggestion => {
+                const suggestionElement = document.createElement('div');
+                suggestionElement.className = 'autocomplete-suggestion';
+                suggestionElement.textContent = suggestion;
+                suggestionElement.onclick = function() {
+                    document.getElementById('culture').value = suggestion;
+                    suggestionsContainer.innerHTML = '';
+                };
+                suggestionsContainer.appendChild(suggestionElement);
+            });
+        });
+
+        document.getElementById('culture').addEventListener('keydown', function(event) {
+            if (event.key === 'Tab') {
+                const suggestionsContainer = document.getElementById('culture-suggestions');
+                const firstSuggestion = suggestionsContainer.firstChild;
+                if (firstSuggestion) {
+                    this.value = firstSuggestion.textContent;
+                    suggestionsContainer.innerHTML = '';
+                    event.preventDefault();
+                }
+            }
         });
 
     </script>
