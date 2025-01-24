@@ -256,265 +256,267 @@
     <pre id="output"></pre>
 
     <script>
-        const personalityConflicts = {
-            'Lustful': 'Chaste',
-            'Chaste': 'Lustful',
-            'Gluttonous': 'Temperate',
-            'Temperate': 'Gluttonous',
-            'Greedy': 'Generous',
-            'Generous': 'Greedy',
-            'Lazy': 'Diligent',
-            'Diligent': 'Lazy',
-            'Wrathful': 'Calm',
-            'Calm': 'Wrathful',
-            'Patient': 'Impatient',
-            'Impatient': 'Patient',
-            'Arrogant': 'Humble',
-            'Humble': 'Arrogant',
-            'Deceitful': 'Honest',
-            'Honest': 'Deceitful',
-            'Craven': 'Brave',
-            'Brave': 'Craven',
-            'Shy': 'Gregarious',
-            'Gregarious': 'Shy',
-            'Ambitious': 'Content',
-            'Content': 'Ambitious',
-            'Arbitrary': 'Just',
-            'Just': 'Arbitrary',
-            'Cynical': 'Zealous',
-            'Zealous': 'Cynical',
-            'Paranoid': 'Trusting',
-            'Trusting': 'Paranoid',
-            'Compassionate': 'Callous',
-            'Callous': 'Compassionate',
-            'Sadistic': 'Forgiving',
-            'Forgiving': 'Sadistic',
-            'Stubborn': 'Fickle',
-            'Fickle': 'Stubborn',
-            'Vengeful': 'Forgiving',
-            'Forgiving': 'Vengeful'
+    const personalityConflicts = {
+        'Lustful': 'Chaste',
+        'Chaste': 'Lustful',
+        'Gluttonous': 'Temperate',
+        'Temperate': 'Gluttonous',
+        'Greedy': 'Generous',
+        'Generous': 'Greedy',
+        'Lazy': 'Diligent',
+        'Diligent': 'Lazy',
+        'Wrathful': 'Calm',
+        'Calm': 'Wrathful',
+        'Patient': 'Impatient',
+        'Impatient': 'Patient',
+        'Arrogant': 'Humble',
+        'Humble': 'Arrogant',
+        'Deceitful': 'Honest',
+        'Honest': 'Deceitful',
+        'Craven': 'Brave',
+        'Brave': 'Craven',
+        'Shy': 'Gregarious',
+        'Gregarious': 'Shy',
+        'Ambitious': 'Content',
+        'Content': 'Ambitious',
+        'Arbitrary': 'Just',
+        'Just': 'Arbitrary',
+        'Cynical': 'Zealous',
+        'Zealous': 'Cynical',
+        'Paranoid': 'Trusting',
+        'Trusting': 'Paranoid',
+        'Compassionate': 'Callous',
+        'Callous': 'Compassionate',
+        'Sadistic': 'Forgiving',
+        'Forgiving': 'Sadistic',
+        'Stubborn': 'Fickle',
+        'Fickle': 'Stubborn',
+        'Vengeful': 'Forgiving',
+        'Forgiving': 'Vengeful'
+    };
+
+    let characterData = '';
+    let namespace = '';
+    let dynasty = '';
+    let religion = '';
+    let culture = '';
+    let characters = [];
+    let characterIdCounter = 1; // Start ID counter at 1
+
+    document.getElementById('namespace').addEventListener('change', function() {
+        namespace = this.value.trim();
+    });
+
+    function moveFocus(event, nextId) {
+        if (event.key === 'Enter') {
+            event.preventDefault(); // Prevent form submission
+            document.getElementById(nextId).focus();
+        }
+    }
+
+    document.querySelectorAll('.collapsible').forEach(button => {
+        button.addEventListener('click', function() {
+            this.classList.toggle("active");
+            const content = this.nextElementSibling;
+            if (content.style.display === "block") {
+                content.style.display = "none";
+            } else {
+                content.style.display = "block";
+            }
+        });
+    });
+
+    function addPersonality() {
+        const selectElement = document.getElementById('personality-select');
+        const selectedValue = selectElement.value;
+        if (!selectedValue) return;
+
+        const pool = document.getElementById('personality-pool');
+        const personalityItem = document.createElement('div');
+        personalityItem.classList.add('personality-item');
+        personalityItem.textContent = selectedValue;
+
+        const removeButton = document.createElement('span');
+        removeButton.classList.add('remove');
+        removeButton.textContent = 'x';
+        removeButton.onclick = function() {
+            personalityItem.remove();
+            updatePersonalityOptions();
         };
 
-        let characterData = '';
-        let namespace = '';
-        let dynasty = '';
-        let religion = '';
-        let culture = '';
-        let characters = [];
-        let characterIdCounter = 1; // Start ID counter at 1
+        personalityItem.appendChild(removeButton);
+        pool.appendChild(personalityItem);
 
-        document.getElementById('namespace').addEventListener('change', function() {
-            namespace = this.value.trim();
+        selectElement.value = '';
+        updatePersonalityOptions();
+    }
+
+    function updatePersonalityOptions() {
+        const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
+        document.querySelectorAll('#personality-select option').forEach(option => {
+            option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
+        });
+    }
+
+    function addEducationTrait() {
+        const selectElement = document.getElementById('education-traits');
+        const selectedValue = selectElement.value;
+        if (!selectedValue) return;
+
+        const pool = document.getElementById('education-traits-pool');
+        const traitItem = document.createElement('div');
+        traitItem.classList.add('personality-item');
+        traitItem.textContent = selectedValue;
+
+        const removeButton = document.createElement('span');
+        removeButton.classList.add('remove');
+        removeButton.textContent = 'x';
+        removeButton.onclick = function() {
+            traitItem.remove();
+        };
+
+        traitItem.appendChild(removeButton);
+        pool.appendChild(traitItem);
+
+        selectElement.value = '';
+    }
+
+    function addCourtTrait() {
+        const selectElement = document.getElementById('court-traits');
+        const selectedValue = selectElement.value;
+        if (!selectedValue) return;
+
+        const pool = document.getElementById('court-traits-pool');
+        const traitItem = document.createElement('div');
+        traitItem.classList.add('personality-item');
+        traitItem.textContent = selectedValue;
+
+        const removeButton = document.createElement('span');
+        removeButton.classList.add('remove');
+        removeButton.textContent = 'x';
+        removeButton.onclick = function() {
+            traitItem.remove();
+        };
+
+        traitItem.appendChild(removeButton);
+        pool.appendChild(traitItem);
+
+        selectElement.value = '';
+    }
+
+    function addCharacter() {
+        const name = document.getElementById('name').value.trim();
+        const female = document.getElementById('female').value;
+        const father = document.getElementById('fatherSelect').value;
+        const mother = document.getElementById('motherSelect').value;
+
+        // Get birth date
+        const birthYear = document.getElementById('birthYear').value.trim();
+        const birthMonth = document.getElementById('birthMonth').value.trim();
+        const birthDay = document.getElementById('birthDay').value.trim();
+
+        // Get death date
+        const deathYear = document.getElementById('deathYear').value.trim();
+        const deathMonth = document.getElementById('deathMonth').value.trim();
+        const deathDay = document.getElementById('deathDay').value.trim();
+
+        // Get selected personalities
+        const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
+
+        // Get selected education traits
+        const selectedEducationTraits = Array.from(document.querySelectorAll('#education-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
+        // Get selected court traits
+        const selectedCourtTraits = Array.from(document.querySelectorAll('#court-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
+
+        // Create character entry with incremented ID
+        let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
+        characterEntry += `  name = "${name}"\n`;
+        characterEntry += `  female = ${female}\n`;
+        characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
+        characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
+        characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
+
+        // Add personalities
+        selectedPersonalities.forEach(personality => {
+            characterEntry += `  add_trait = ${personality}\n`;
         });
 
-        function moveFocus(event, nextId) {
-            if (event.key === 'Enter') {
-                event.preventDefault(); // Prevent form submission
-                document.getElementById(nextId).focus();
-            }
-        }
-
-        document.querySelectorAll('.collapsible').forEach(button => {
-            button.addEventListener('click', function() {
-                this.classList.toggle("active");
-                const content = this.nextElementSibling;
-                if (content.style.display === "block") {
-                    content.style.display = "none";
-                } else {
-                    content.style.display = "block";
-                }
-            });
+        // Add education traits
+        selectedEducationTraits.forEach(trait => {
+            characterEntry += `  add_trait = ${trait}\n`;
         });
 
-        function addPersonality() {
-            const selectElement = document.getElementById('personality-select');
-            const selectedValue = selectElement.value;
-            if (!selectedValue) return;
+        // Add court traits
+        selectedCourtTraits.forEach(trait => {
+            characterEntry += `  add_trait = ${trait}\n`;
+        });
 
-            const pool = document.getElementById('personality-pool');
-            const personalityItem = document.createElement('div');
-            personalityItem.classList.add('personality-item');
-            personalityItem.textContent = selectedValue;
-
-            const removeButton = document.createElement('span');
-            removeButton.classList.add('remove');
-            removeButton.textContent = 'x';
-            removeButton.onclick = function() {
-                personalityItem.remove();
-                updatePersonalityOptions();
-            };
-
-            personalityItem.appendChild(removeButton);
-            pool.appendChild(personalityItem);
-
-            selectElement.value = '';
-            updatePersonalityOptions();
+        if (father) {
+            characterEntry += `  father = ${father}\n`;
+        }
+        if (mother) {
+            characterEntry += `  mother = ${mother}\n`;
         }
 
-        function updatePersonalityOptions() {
-            const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
-            document.querySelectorAll('#personality-select option').forEach(option => {
-                option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
-            });
-        }
-
-        function addEducationTrait() {
-            const selectElement = document.getElementById('education-traits');
-            const selectedValue = selectElement.value;
-            if (!selectedValue) return;
-
-            const pool = document.getElementById('education-traits-pool');
-            const traitItem = document.createElement('div');
-            traitItem.classList.add('personality-item');
-            traitItem.textContent = selectedValue;
-
-            const removeButton = document.createElement('span');
-            removeButton.classList.add('remove');
-            removeButton.textContent = 'x';
-            removeButton.onclick = function() {
-                traitItem.remove();
-            };
-
-            traitItem.appendChild(removeButton);
-            pool.appendChild(traitItem);
-
-            selectElement.value = '';
-        }
-
-        function addCourtTrait() {
-            const selectElement = document.getElementById('court-traits');
-            const selectedValue = selectElement.value;
-            if (!selectedValue) return;
-
-            const pool = document.getElementById('court-traits-pool');
-            const traitItem = document.createElement('div');
-            traitItem.classList.add('personality-item');
-            traitItem.textContent = selectedValue;
-
-            const removeButton = document.createElement('span');
-            removeButton.classList.add('remove');
-            removeButton.textContent = 'x';
-            removeButton.onclick = function() {
-                traitItem.remove();
-            };
-
-            traitItem.appendChild(removeButton);
-            pool.appendChild(traitItem);
-
-            selectElement.value = '';
-        }
-
-        function addCharacter() {
-            const name = document.getElementById('name').value.trim();
-            const female = document.getElementById('female').value;
-            const father = document.getElementById('fatherSelect').value;
-            const mother = document.getElementById('motherSelect').value;
-
-            // Get birth date
-            const birthYear = document.getElementById('birthYear').value.trim();
-            const birthMonth = document.getElementById('birthMonth').value.trim();
-            const birthDay = document.getElementById('birthDay').value.trim();
-
-            // Get death date
-            const deathYear = document.getElementById('deathYear').value.trim();
-            const deathMonth = document.getElementById('deathMonth').value.trim();
-            const deathDay = document.getElementById('deathDay').value.trim();
-
-            // Get selected personalities
-            const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
-
-            // Get selected education traits
-            const selectedEducationTraits = Array.from(document.querySelectorAll('#education-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
-            // Get selected court traits
-            const selectedCourtTraits = Array.from(document.querySelectorAll('#court-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
-
-            // Create character entry with incremented ID
-            let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
-            characterEntry += `  name = "${name}"\n`;
-            characterEntry += `  female = ${female}\n`;
-            characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
-            characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
-            characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
-
-            // Add personalities
-            selectedPersonalities.forEach(personality => {
-                characterEntry += `  add_trait = ${personality}\n`;
-            });
-
-            // Add education traits
-            selectedEducationTraits.forEach(trait => {
-                characterEntry += `  add_trait = ${trait}\n`;
-            });
-
-            // Add court traits
-            selectedCourtTraits.forEach(trait => {
-                characterEntry += `  add_trait = ${trait}\n`;
-            });
-
-            if (father) {
-                characterEntry += `  father = ${father}\n`;
-            }
-            if (mother) {
-                characterEntry += `  mother = ${mother}\n`;
-            }
-
-            characterEntry += `  ${birthYear}.${birthMonth}.${birthDay} = {\n`;
-            characterEntry += `    birth = yes\n`;
+        characterEntry += `  ${birthYear}.${birthMonth}.${birthDay} = {\n`;
+        characterEntry += `    birth = yes\n`;
+        characterEntry += `  }\n`;
+        if (deathYear && deathMonth && deathDay) {
+            characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
+            characterEntry += `    death = yes\n`;
             characterEntry += `  }\n`;
-            if (deathYear && deathMonth && deathDay) {
-                characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
-                characterEntry += `    death = yes\n`;
-                characterEntry += `  }\n`;
+        }
+        characterEntry += `}\n\n`;
+
+        characterData += characterEntry;
+        characters.push({ name, female, id: characterIdCounter }); // Store character for parent selection
+        updateParentOptions();
+        document.getElementById('output').textContent = characterData;
+
+        // Increment the character ID counter for the next character
+        characterIdCounter++;
+
+        // Clear input fields after adding the character
+        document.getElementById('name').value = '';
+        document.getElementById('fatherSelect').value = '';
+        document.getElementById('motherSelect').value = '';
+        document.getElementById('birthYear').value = '';
+        document.getElementById('birthMonth').value = '';
+        document.getElementById('birthDay').value = '';
+        document.getElementById('deathYear').value = '';
+        document.getElementById('deathMonth').value = '';
+        document.getElementById('deathDay').value = '';
+        document.getElementById('personality-select').value = '';
+        document.getElementById('personality-pool').innerHTML = '';
+        document.getElementById('education-traits-pool').innerHTML = '';
+        document.getElementById('court-traits-pool').innerHTML = '';
+    }
+
+    function updateParentOptions() {
+        const fatherSelect = document.getElementById('fatherSelect');
+        const motherSelect = document.getElementById('motherSelect');
+
+        fatherSelect.innerHTML = '<option value="">Select Father</option>'; // Reset options
+        motherSelect.innerHTML = '<option value="">Select Mother</option>'; // Reset options
+
+        characters.forEach(character => {
+            const option = new Option(character.name, `${namespace}_${character.id}`);
+            if (character.female === "no") { // Male character
+                fatherSelect.add(option);
+            } else { // Female character
+                motherSelect.add(option);
             }
-            characterEntry += `}\n\n`;
+        });
+    }
 
-            characterData += characterEntry;
-            characters.push({ name, female, id: characterIdCounter }); // Store character for parent selection
-            updateParentOptions();
-            document.getElementById('output').textContent = characterData;
-
-            // Increment the character ID counter for the next character
-            characterIdCounter++;
-
-            // Clear input fields after adding the character
-            document.getElementById('name').value = '';
-            document.getElementById('fatherSelect').value = '';
-            document.getElementById('motherSelect').value = '';
-            document.getElementById('birthYear').value = '';
-            document.getElementById('birthMonth').value = '';
-            document.getElementById('birthDay').value = '';
-            document.getElementById('deathYear').value = '';
-            document.getElementById('deathMonth').value = '';
-            document.getElementById('deathDay').value = '';
-            document.getElementById('personality-select').value = '';
-            document.getElementById('personality-pool').innerHTML = '';
-        }
-
-        function updateParentOptions() {
-            const fatherSelect = document.getElementById('fatherSelect');
-            const motherSelect = document.getElementById('motherSelect');
-
-            fatherSelect.innerHTML = '<option value="">Select Father</option>'; // Reset options
-            motherSelect.innerHTML = '<option value="">Select Mother</option>'; // Reset options
-
-            characters.forEach(character => {
-                const option = new Option(character.name, `${namespace}_${character.id}`);
-                if (character.female === "no") { // Male character
-                    fatherSelect.add(option);
-                } else { // Female character
-                    motherSelect.add(option);
-                }
-            });
-        }
-
-        function copyToClipboard() {
-            navigator.clipboard.writeText(characterData).then(() => {
-                alert('Character data copied to clipboard!');
-            }).catch(err => {
-                console.error('Could not copy text: ', err);
-            });
-        }
-    </script>
+    function copyToClipboard() {
+        navigator.clipboard.writeText(characterData).then(() => {
+            alert('Character data copied to clipboard!');
+        }).catch(err => {
+            console.error('Could not copy text: ', err);
+        });
+    }
+</script>
 
 </body>
 </html>
