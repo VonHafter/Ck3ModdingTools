@@ -32,14 +32,6 @@
         button:hover {
             background-color: #4cae4c;
         }
-        .date-box {
-            display: inline-block;
-            width: 30%;
-            margin-right: 5%;
-        }
-        .date-label {
-            display: block;
-        }
         .collapsible {
             background-color: #e7f3fe;
             color: #0056b3;
@@ -57,26 +49,18 @@
             overflow: hidden;
             padding: 10px 0;
         }
-        .personality-container {
+        .traits-container {
             margin-top: 10px;
         }
-        .personality-pool {
-            margin-top: 10px;
-            padding: 10px;
-            border: 1px solid #ccc;
-            border-radius: 4px;
-            background-color: #fafafa;
-        }
-        .personality-item {
+        .trait-item {
             display: inline-block;
             padding: 5px 10px;
             margin: 5px;
             background-color: #e7f3fe;
             color: #0056b3;
             border-radius: 4px;
-            cursor: pointer;
         }
-        .personality-item .remove {
+        .remove-trait {
             margin-left: 10px;
             color: red;
             cursor: pointer;
@@ -91,30 +75,29 @@
     <input type="text" id="namespace" placeholder="Enter Namespace" required>
 
     <h2>Character Details</h2>
-
     <label for="name">Character Name:</label>
-    <input type="text" id="name" placeholder="Enter Character Name" required onkeypress="moveFocus(event, 'female')">
+    <input type="text" id="name" placeholder="Enter Character Name" required>
 
-    <label for="female">Female:</label>
-    <select id="female" onkeypress="moveFocus(event, 'dynasty')">
-        <option value="yes">Yes</option>
-        <option value="no">No</option>
+    <label for="gender">Gender:</label>
+    <select id="gender">
+        <option value="female">Female</option>
+        <option value="male">Male</option>
     </select>
 
     <button class="collapsible">Religion, Culture, and Dynasty ID</button>
     <div class="content">
         <label for="dynasty">Dynasty ID:</label>
-        <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required onkeypress="moveFocus(event, 'religion')">
-        
+        <input type="text" id="dynasty" placeholder="Enter Dynasty ID" required>
+
         <label for="religion">Religion:</label>
-        <input type="text" id="religion" placeholder="Enter Religion" required onkeypress="moveFocus(event, 'culture')">
+        <input type="text" id="religion" placeholder="Enter Religion" required>
 
         <label for="culture">Culture:</label>
-        <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
+        <input type="text" id="culture" placeholder="Enter Culture" required>
     </div>
 
     <button class="collapsible">Traits Selection</button>
-    <div class="content">
+    <div class="content traits-container">
         <label for="education-traits">Select Education Trait:</label>
         <select id="education-traits">
             <option value="">Select Trait</option>
@@ -124,399 +107,64 @@
             <option value="Education_intrigue_4">Elusive Shadow</option>
             <option value="Education_intrigue_5">Conniving Puppetmaster</option>
             <option value="Education_diplomacy_1">Naive Appeaser</option>
-            <option value="Education_diplomacy_2">Adequate Bargainer</option>
-            <option value="Education_diplomacy_3">Charismatic Negotiator</option>
-            <option value="Education_diplomacy_4">Grey Eminence</option>
-            <option value="Education_diplomacy_5">Virtuoso Arbitrator</option>
-            <option value="education_stewardship_1">Indulgent Wastrel</option>
-            <option value="Education_stewardship_2">Thrifty Clerk</option>
-            <option value="education_stewardship_3">Fortune Builder</option>
-            <option value="education_stewardship_4">Midas Touched</option>
-            <option value="Education_stewardship_5">Golden Sovereign</option>
-            <option value="Education_martial_1">Misguided Warrior</option>
-            <option value="Education_martial_2">Tough Soldier</option>
-            <option value="Education_martial_3">Skilled Tactician</option>
-            <option value="Education_martial_4">Brilliant Strategist</option>
-            <option value="Education_martial_5">Exalted Warlord</option>
-            <option value="Education_learning_1">Conscientious Scribe</option>
-            <option value="Education_learning_2">Insightful Thinker</option>
-            <option value="Education_learning_3">Astute Intellectual</option>
-            <option value="Education_learning_4">Mastermind Philosopher</option>
-            <option value="Education_learning_5">Erudite Oracle</option>
-            <option value="Education_republican_knowledge_1">Town Dweller</option>
-            <option value="Education_republican_knowledge_2">Mayor Trainee</option>
-            <option value="Education_republican_knowledge_3">Town Maven</option>
-            <option value="Education_republican_knowledge_4">Republican Heir</option>
-            <option value="Education_martial_prowess_1">Bumbling Squire</option>
-            <option value="Education_martial_prowess_2">Confident Knight</option>
-            <option value="Education_martial_prowess_3">Formidable Banneret</option>
-            <option value="Education_martial_prowess_4">Famous Champion</option>
+            <option value="Education_diplomacy_2">Fickle Warden</option>
+            <option value="Education_diplomacy_3">Ostentatious Warden</option>
+            <option value="Education_diplomacy_4">Cunning Manipulator</option>
+            <option value="Education_diplomacy_5">Mastermind Theologian</option>
         </select>
-        
+        <button onclick="addTrait('education-traits')">Add Education Trait</button>
+
         <label for="court-traits">Select Court Trait:</label>
         <select id="court-traits">
             <option value="">Select Trait</option>
-            <option value="Diplomatic_court_1">Diplomatic Court 1</option>
-            <option value="Diplomatic_court_2">Diplomatic Court 2</option>
-            <option value="Warlike_court_1">Warlike Court 1</option>
-            <option value="Warlike_court_2">Warlike Court 2</option>
-            <option value="Administrative_court_1">Administrative Court 1</option>
-            <option value="Administrative_court_2">Administrative Court 2</option>
-            <option value="Intrigue_court_1">Intrigue Court 1</option>
-            <option value="Intrigue_court_2">Intrigue Court 2</option>
-            <option value="Scholarly_court_1">Scholarly Court 1</option>
-            <option value="Scholarly_court_2">Scholarly Court 2</option>
+            <option value="Court_gardener">Gardener</option>
+            <option value="Court_artist">Artist</option>
+            <option value="Court_musician">Musician</option>
+            <option value="Court_scholar">Scholar</option>
+            <option value="Court_courtier">Courtier</option>
         </select>
+        <button onclick="addTrait('court-traits')">Add Court Trait</button>
+
+        <h3>Added Traits:</h3>
+        <div id="added-traits"></div>
     </div>
-
-    <h2>Personalities</h2>
-    <div class="personality-container">
-        <label for="personality-select">Add Personality:</label>
-        <select id="personality-select" onkeypress="moveFocus(event, 'fatherSelect')">
-            <option value="">Select Personality</option>
-            <option value="Lustful">Lustful</option>
-            <option value="Chaste">Chaste</option>
-            <option value="Gluttonous">Gluttonous</option>
-            <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
-            <option value="Lazy">Lazy</option>
-            <option value="Diligent">Diligent</option>
-            <option value="Wrathful">Wrathful</option>
-            <option value="Calm">Calm</option>
-            <option value="Patient">Patient</option>
-            <option value="Impatient">Impatient</option>
-            <option value="Arrogant">Arrogant</option>
-            <option value="Humble">Humble</option>
-            <option value="Deceitful">Deceitful</option>
-            <option value="Honest">Honest</option>
-            <option value="Craven">Craven</option>
-            <option value="Brave">Brave</option>
-            <option value="Shy">Shy</option>
-            <option value="Gregarious">Gregarious</option>
-            <option value="Ambitious">Ambitious</option>
-            <option value="Content">Content</option>
-            <option value="Arbitrary">Arbitrary</option>
-            <option value="Just">Just</option>
-            <option value="Cynical">Cynical</option>
-            <option value="Zealous">Zealous</option>
-            <option value="Paranoid">Paranoid</option>
-            <option value="Trusting">Trusting</option>
-            <option value="Compassionate">Compassionate</option>
-            <option value="Callous">Callous</option>
-            <option value="Sadistic">Sadistic</option>
-            <option value="Stubborn">Stubborn</option>
-            <option value="Fickle">Fickle</option>
-            <option value="Vengeful">Vengeful</option>
-            <option value="Forgiving">Forgiving</option>
-            <option value="Eccentric">Eccentric</option>
-        </select>
-        <button onclick="addPersonality()">Add</button>
-
-        <div class="personality-pool" id="personality-pool">
-            <!-- Selected personalities will appear here -->
-        </div>
-    </div>
-
-    <h2>Parent Selection:</h2>
-    <label for="fatherSelect" class="character-select">Father:</label>
-    <select id="fatherSelect" onkeypress="moveFocus(event, 'motherSelect')">
-        <option value="">Select Father</option>
-    </select>
-
-    <label for="motherSelect" class="character-select">Mother:</label>
-    <select id="motherSelect" onkeypress="moveFocus(event, 'birthYear')">
-        <option value="">Select Mother</option>
-    </select>
-
-    <h2>Birth Info:</h2>
-    <div>
-        <label class="date-label">Birth Year:</label>
-        <input type="number" class="date-box" id="birthYear" placeholder="Year" required onkeypress="moveFocus(event, 'birthMonth')">
-        <label class="date-label">Birth Month:</label>
-        <input type="number" class="date-box" id="birthMonth" placeholder="Month" min="1" max="12" required onkeypress="moveFocus(event, 'birthDay')">
-        <label class="date-label">Birth Day:</label>
-        <input type="number" class="date-box" id="birthDay" placeholder="Day" min="1" max="31" required>
-    </div>
-
-    <h2>Death Info:</h2>
-    <div>
-        <label class="date-label">Death Year:</label>
-        <input type="number" class="date-box" id="deathYear" placeholder="Year" onkeypress="moveFocus(event, 'deathMonth')">
-        <label class="date-label">Death Month:</label>
-        <input type="number" class="date-box" id="deathMonth" placeholder="Month" min="1" max="12" onkeypress="moveFocus(event, 'deathDay')">
-        <label class="date-label">Death Day:</label>
-        <input type="number" class="date-box" id="deathDay" placeholder="Day" min="1" max="31">
-    </div>
-
-    <button onclick="addCharacter()">Add Character</button>
-    <button onclick="copyToClipboard()">Copy to Clipboard</button>
-
-    <h2>Generated Character Data:</h2>
-    <pre id="output"></pre>
 
     <script>
-    const personalityConflicts = {
-        'Lustful': 'Chaste',
-        'Chaste': 'Lustful',
-        'Gluttonous': 'Temperate',
-        'Temperate': 'Gluttonous',
-        'Greedy': 'Generous',
-        'Generous': 'Greedy',
-        'Lazy': 'Diligent',
-        'Diligent': 'Lazy',
-        'Wrathful': 'Calm',
-        'Calm': 'Wrathful',
-        'Patient': 'Impatient',
-        'Impatient': 'Patient',
-        'Arrogant': 'Humble',
-        'Humble': 'Arrogant',
-        'Deceitful': 'Honest',
-        'Honest': 'Deceitful',
-        'Craven': 'Brave',
-        'Brave': 'Craven',
-        'Shy': 'Gregarious',
-        'Gregarious': 'Shy',
-        'Ambitious': 'Content',
-        'Content': 'Ambitious',
-        'Arbitrary': 'Just',
-        'Just': 'Arbitrary',
-        'Cynical': 'Zealous',
-        'Zealous': 'Cynical',
-        'Paranoid': 'Trusting',
-        'Trusting': 'Paranoid',
-        'Compassionate': 'Callous',
-        'Callous': 'Compassionate',
-        'Sadistic': 'Forgiving',
-        'Forgiving': 'Sadistic',
-        'Stubborn': 'Fickle',
-        'Fickle': 'Stubborn',
-        'Vengeful': 'Forgiving',
-        'Forgiving': 'Vengeful'
-    };
+        document.querySelectorAll('.collapsible').forEach(button => {
+            button.addEventListener('click', function() {
+                this.classList.toggle("active");
+                let content = this.nextElementSibling;
+                content.style.display = content.style.display === "block" ? "none" : "block";
+            });
+        });
 
-    let characterData = '';
-    let namespace = '';
-    let dynasty = '';
-    let religion = '';
-    let culture = '';
-    let characters = [];
-    let characterIdCounter = 1; // Start ID counter at 1
+        function addTrait(traitSelectId) {
+            const traitSelect = document.getElementById(traitSelectId);
+            const selectedTrait = traitSelect.value;
 
-    document.getElementById('namespace').addEventListener('change', function() {
-        namespace = this.value.trim();
-    });
+            if (selectedTrait) {
+                const addedTraitsContainer = document.getElementById('added-traits');
 
-    function moveFocus(event, nextId) {
-        if (event.key === 'Enter') {
-            event.preventDefault(); // Prevent form submission
-            document.getElementById(nextId).focus();
-        }
-    }
+                const traitItem = document.createElement('div');
+                traitItem.className = 'trait-item';
+                traitItem.textContent = selectedTrait;
 
-    document.querySelectorAll('.collapsible').forEach(button => {
-        button.addEventListener('click', function() {
-            this.classList.toggle("active");
-            const content = this.nextElementSibling;
-            if (content.style.display === "block") {
-                content.style.display = "none";
+                const removeButton = document.createElement('span');
+                removeButton.className = 'remove-trait';
+                removeButton.textContent = 'Remove';
+                removeButton.onclick = function() {
+                    addedTraitsContainer.removeChild(traitItem);
+                };
+
+                traitItem.appendChild(removeButton);
+                addedTraitsContainer.appendChild(traitItem);
+
+                traitSelect.value = ''; // Reset the dropdown
             } else {
-                content.style.display = "block";
+                alert("Please select a trait to add.");
             }
-        });
-    });
-
-    function addPersonality() {
-        const selectElement = document.getElementById('personality-select');
-        const selectedValue = selectElement.value;
-        if (!selectedValue) return;
-
-        const pool = document.getElementById('personality-pool');
-        const personalityItem = document.createElement('div');
-        personalityItem.classList.add('personality-item');
-        personalityItem.textContent = selectedValue;
-
-        const removeButton = document.createElement('span');
-        removeButton.classList.add('remove');
-        removeButton.textContent = 'x';
-        removeButton.onclick = function() {
-            personalityItem.remove();
-            updatePersonalityOptions();
-        };
-
-        personalityItem.appendChild(removeButton);
-        pool.appendChild(personalityItem);
-
-        selectElement.value = '';
-        updatePersonalityOptions();
-    }
-
-    function updatePersonalityOptions() {
-        const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
-        document.querySelectorAll('#personality-select option').forEach(option => {
-            option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
-        });
-    }
-
-    function addEducationTrait() {
-        const selectElement = document.getElementById('education-traits');
-        const selectedValue = selectElement.value;
-        if (!selectedValue) return;
-
-        const pool = document.getElementById('education-traits-pool');
-        const traitItem = document.createElement('div');
-        traitItem.classList.add('personality-item');
-        traitItem.textContent = selectedValue;
-
-        const removeButton = document.createElement('span');
-        removeButton.classList.add('remove');
-        removeButton.textContent = 'x';
-        removeButton.onclick = function() {
-            traitItem.remove();
-        };
-
-        traitItem.appendChild(removeButton);
-        pool.appendChild(traitItem);
-
-        selectElement.value = '';
-    }
-
-    function addCourtTrait() {
-        const selectElement = document.getElementById('court-traits');
-        const selectedValue = selectElement.value;
-        if (!selectedValue) return;
-
-        const pool = document.getElementById('court-traits-pool');
-        const traitItem = document.createElement('div');
-        traitItem.classList.add('personality-item');
-        traitItem.textContent = selectedValue;
-
-        const removeButton = document.createElement('span');
-        removeButton.classList.add('remove');
-        removeButton.textContent = 'x';
-        removeButton.onclick = function() {
-            traitItem.remove();
-        };
-
-        traitItem.appendChild(removeButton);
-        pool.appendChild(traitItem);
-
-        selectElement.value = '';
-    }
-
-    function addCharacter() {
-        const name = document.getElementById('name').value.trim();
-        const female = document.getElementById('female').value;
-        const father = document.getElementById('fatherSelect').value;
-        const mother = document.getElementById('motherSelect').value;
-
-        // Get birth date
-        const birthYear = document.getElementById('birthYear').value.trim();
-        const birthMonth = document.getElementById('birthMonth').value.trim();
-        const birthDay = document.getElementById('birthDay').value.trim();
-
-        // Get death date
-        const deathYear = document.getElementById('deathYear').value.trim();
-        const deathMonth = document.getElementById('deathMonth').value.trim();
-        const deathDay = document.getElementById('deathDay').value.trim();
-
-        // Get selected personalities
-        const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
-
-        // Get selected education traits
-        const selectedEducationTraits = Array.from(document.querySelectorAll('#education-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
-        // Get selected court traits
-        const selectedCourtTraits = Array.from(document.querySelectorAll('#court-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
-
-        // Create character entry with incremented ID
-        let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
-        characterEntry += `  name = "${name}"\n`;
-        characterEntry += `  female = ${female}\n`;
-        characterEntry += `  dynasty = ${document.getElementById('dynasty').value.trim()}\n`;
-        characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
-        characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
-
-        // Add personalities
-        selectedPersonalities.forEach(personality => {
-            characterEntry += `  add_trait = ${personality}\n`;
-        });
-
-        // Add education traits
-        selectedEducationTraits.forEach(trait => {
-            characterEntry += `  add_trait = ${trait}\n`;
-        });
-
-        // Add court traits
-        selectedCourtTraits.forEach(trait => {
-            characterEntry += `  add_trait = ${trait}\n`;
-        });
-
-        if (father) {
-            characterEntry += `  father = ${father}\n`;
         }
-        if (mother) {
-            characterEntry += `  mother = ${mother}\n`;
-        }
-
-        characterEntry += `  ${birthYear}.${birthMonth}.${birthDay} = {\n`;
-        characterEntry += `    birth = yes\n`;
-        characterEntry += `  }\n`;
-        if (deathYear && deathMonth && deathDay) {
-            characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
-            characterEntry += `    death = yes\n`;
-            characterEntry += `  }\n`;
-        }
-        characterEntry += `}\n\n`;
-
-        characterData += characterEntry;
-        characters.push({ name, female, id: characterIdCounter }); // Store character for parent selection
-        updateParentOptions();
-        document.getElementById('output').textContent = characterData;
-
-        // Increment the character ID counter for the next character
-        characterIdCounter++;
-
-        // Clear input fields after adding the character
-        document.getElementById('name').value = '';
-        document.getElementById('fatherSelect').value = '';
-        document.getElementById('motherSelect').value = '';
-        document.getElementById('birthYear').value = '';
-        document.getElementById('birthMonth').value = '';
-        document.getElementById('birthDay').value = '';
-        document.getElementById('deathYear').value = '';
-        document.getElementById('deathMonth').value = '';
-        document.getElementById('deathDay').value = '';
-        document.getElementById('personality-select').value = '';
-        document.getElementById('personality-pool').innerHTML = '';
-        document.getElementById('education-traits-pool').innerHTML = '';
-        document.getElementById('court-traits-pool').innerHTML = '';
-    }
-
-    function updateParentOptions() {
-        const fatherSelect = document.getElementById('fatherSelect');
-        const motherSelect = document.getElementById('motherSelect');
-
-        fatherSelect.innerHTML = '<option value="">Select Father</option>'; // Reset options
-        motherSelect.innerHTML = '<option value="">Select Mother</option>'; // Reset options
-
-        characters.forEach(character => {
-            const option = new Option(character.name, `${namespace}_${character.id}`);
-            if (character.female === "no") { // Male character
-                fatherSelect.add(option);
-            } else { // Female character
-                motherSelect.add(option);
-            }
-        });
-    }
-
-    function copyToClipboard() {
-        navigator.clipboard.writeText(characterData).then(() => {
-            alert('Character data copied to clipboard!');
-        }).catch(err => {
-            console.error('Could not copy text: ', err);
-        });
-    }
-</script>
+    </script>
 
 </body>
 </html>
