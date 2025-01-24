@@ -113,6 +113,73 @@
         <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
     </div>
 
+    <button class="collapsible">Education Traits</button>
+    <div class="content">
+        <label for="education-traits">Select Education Trait:</label>
+        <select id="education-traits">
+            <option value="">Select Trait</option>
+            <option value="Education_intrigue_1">Amateurish Plotter</option>
+            <option value="Education_intrigue_2">Flamboyant Trickster</option>
+            <option value="Education_intrigue_3">Intricate Webweaver</option>
+            <option value="Education_intrigue_4">Elusive Shadow</option>
+            <option value="Education_intrigue_5">Conniving Puppetmaster</option>
+            <option value="Education_diplomacy_1">Naive Appeaser</option>
+            <option value="Education_diplomacy_2">Adequate Bargainer</option>
+            <option value="Education_diplomacy_3">Charismatic Negotiator</option>
+            <option value="Education_diplomacy_4">Grey Eminence</option>
+            <option value="Education_diplomacy_5">Virtuoso Arbitrator</option>
+            <option value="education_stewardship_1">Indulgent Wastrel</option>
+            <option value="Education_stewardship_2">Thrifty Clerk</option>
+            <option value="education_stewardship_3">Fortune Builder</option>
+            <option value="education_stewardship_4">Midas Touched</option>
+            <option value="Education_stewardship_5">Golden Sovereign</option>
+            <option value="Education_martial_1">Misguided Warrior</option>
+            <option value="Education_martial_2">Tough Soldier</option>
+            <option value="Education_martial_3">Skilled Tactician</option>
+            <option value="Education_martial_4">Brilliant Strategist</option>
+            <option value="Education_martial_5">Exalted Warlord</option>
+            <option value="Education_learning_1">Conscientious Scribe</option>
+            <option value="Education_learning_2">Insightful Thinker</option>
+            <option value="Education_learning_3">Astute Intellectual</option>
+            <option value="Education_learning_4">Mastermind Philosopher</option>
+            <option value="Education_learning_5">Erudite Oracle</option>
+            <option value="Education_republican_knowledge_1">Town Dweller</option>
+            <option value="Education_republican_knowledge_2">Mayor Trainee</option>
+            <option value="Education_republican_knowledge_3">Town Maven</option>
+            <option value="Education_republican_knowledge_4">Republican Heir</option>
+            <option value="Education_martial_prowess_1">Bumbling Squire</option>
+            <option value="Education_martial_prowess_2">Confident Knight</option>
+            <option value="Education_martial_prowess_3">Formidable Banneret</option>
+            <option value="Education_martial_prowess_4">Famous Champion</option>
+        </select>
+        <button onclick="addEducationTrait()">Add</button>
+        <div class="education-traits-pool" id="education-traits-pool">
+            <!-- Selected education traits will appear here -->
+        </div>
+    </div>
+
+    <button class="collapsible">Court Traits</button>
+    <div class="content">
+        <label for="court-traits">Select Court Trait:</label>
+        <select id="court-traits"></select>
+            <option value="">Select Trait</option>
+            <option value="Diplomatic_court_1">Diplomatic</option>
+            <option value="Diplomatic_court_2">Diplomatic lvl-2</option>
+            <option value="Warlike_court_1">Warlike Court 1</option>
+            <option value="Warlike_court_2">Warlike Court 2</option>
+            <option value="Administrative_court_1">Administrative Court 1</option>
+            <option value="Administrative_court_2">Administrative Court 2</option>
+            <option value="Intrigue_court_1">Intrigue Court 1</option>
+            <option value="Intrigue_court_2">Intrigue Court 2</option>
+            <option value="Scholarly_court_1">Scholarly Court 1</option>
+            <option value="scholarly_court_2">Scholarly Court 2</option>
+        </select>
+        <button onclick="addCourtTrait()">Add</button>
+        <div class="court-traits-pool" id="court-traits-pool">
+            <!-- Selected court traits will appear here -->
+        </div>
+    </div>
+
     <h2>Personalities</h2>
     <div class="personality-container">
         <label for="personality-select">Add Personality:</label>
@@ -302,6 +369,52 @@
             });
         }
 
+        function addEducationTrait() {
+            const selectElement = document.getElementById('education-traits');
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+
+            const pool = document.getElementById('education-traits-pool');
+            const traitItem = document.createElement('div');
+            traitItem.classList.add('personality-item');
+            traitItem.textContent = selectedValue;
+
+            const removeButton = document.createElement('span');
+            removeButton.classList.add('remove');
+            removeButton.textContent = 'x';
+            removeButton.onclick = function() {
+                traitItem.remove();
+            };
+
+            traitItem.appendChild(removeButton);
+            pool.appendChild(traitItem);
+
+            selectElement.value = '';
+        }
+
+        function addCourtTrait() {
+            const selectElement = document.getElementById('court-traits');
+            const selectedValue = selectElement.value;
+            if (!selectedValue) return;
+
+            const pool = document.getElementById('court-traits-pool');
+            const traitItem = document.createElement('div');
+            traitItem.classList.add('personality-item');
+            traitItem.textContent = selectedValue;
+
+            const removeButton = document.createElement('span');
+            removeButton.classList.add('remove');
+            removeButton.textContent = 'x';
+            removeButton.onclick = function() {
+                traitItem.remove();
+            };
+
+            traitItem.appendChild(removeButton);
+            pool.appendChild(traitItem);
+
+            selectElement.value = '';
+        }
+
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
             const female = document.getElementById('female').value;
@@ -321,6 +434,11 @@
             // Get selected personalities
             const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
 
+            // Get selected education traits
+            const selectedEducationTraits = Array.from(document.querySelectorAll('#education-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
+            // Get selected court traits
+            const selectedCourtTraits = Array.from(document.querySelectorAll('#court-traits-pool .personality-item')).map(item => item.textContent.replace('x', '').trim());
+
             // Create character entry with incremented ID
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
             characterEntry += `  name = "${name}"\n`;
@@ -332,6 +450,16 @@
             // Add personalities
             selectedPersonalities.forEach(personality => {
                 characterEntry += `  add_trait = ${personality}\n`;
+            });
+
+            // Add education traits
+            selectedEducationTraits.forEach(trait => {
+                characterEntry += `  add_trait = ${trait}\n`;
+            });
+
+            // Add court traits
+            selectedCourtTraits.forEach(trait => {
+                characterEntry += `  add_trait = ${trait}\n`;
             });
 
             if (father) {
