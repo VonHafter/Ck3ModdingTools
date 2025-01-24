@@ -1,10 +1,11 @@
-Diplomatic_court_1 = Diplomatic 1
-Diplomatic_court_2 = Diplomatic 2
-Warlike_court_1 = Warlike 1
-Warlike_court_2 = Warlike 2
-Administrative_court_1 = Administrative 1
-Administrative_court_2 = Administrative 2
-Intrigue_court_1 = Intrigue 1
-Intrigue_court_2 = Intrigue 2
-Scholarly_court_1 = Scholarly 1
-scholarly_court_2 = Scholary 2
+// Format: Code;Name
+Diplomatic_court_1;Diplomatic 1
+Diplomatic_court_2;Diplomatic 2
+Warlike_court_1;Warlike 1
+Warlike_court_2;Warlike 2
+Administrative_court_1;Administrative 1
+Administrative_court_2;Administrative 2
+Intrigue_court_1;Intrigue 1
+Intrigue_court_2;Intrigue 2
+Scholarly_court_1;Scholarly 1
+Scholarly_court_2;Scholarly 2

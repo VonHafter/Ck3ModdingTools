@@ -183,8 +183,7 @@
             <option value="Chaste">Chaste</option>
             <option value="Gluttonous">Gluttonous</option>
             <option value="Temperate">Temperate</option>
-            <option value="Greedy">Greedy</option>
-            <option value="Generous">Generous</option>
+            <option value="Greedy">Generous</option>
             <option value="Lazy">Lazy</option>
             <option value="Diligent">Diligent</option>
             <option value="Wrathful">Wrathful</option>
@@ -358,8 +357,7 @@
             document.querySelectorAll('#personality-select option').forEach(option => {
                 option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
             });
-        }
-
+        }     
         function addEducationTrait() {
             const selectElement = document.getElementById('education-traits');
             const selectedValue = selectElement.value;
@@ -367,15 +365,22 @@
 
             const addedTraitsContainer = document.getElementById('added-traits');
 
+            // Remove existing education trait if any
+            const existingEducationTrait = addedTraitsContainer.querySelector('[data-trait-type="education"]');
+            if (existingEducationTrait) {
+            addedTraitsContainer.removeChild(existingEducationTrait);
+            }
+
             const traitItem = document.createElement('div');
             traitItem.className = 'personality-item';
             traitItem.textContent = selectedValue;
+            traitItem.dataset.traitType = 'education';
 
             const removeButton = document.createElement('span');
             removeButton.className = 'remove';
             removeButton.textContent = 'x';
             removeButton.onclick = function() {
-                addedTraitsContainer.removeChild(traitItem);
+            addedTraitsContainer.removeChild(traitItem);
             };
 
             traitItem.appendChild(removeButton);
@@ -391,9 +396,16 @@
 
             const addedTraitsContainer = document.getElementById('added-traits');
 
+            // Remove existing court trait if any
+            const existingCourtTrait = addedTraitsContainer.querySelector('[data-trait-type="court"]');
+            if (existingCourtTrait) {
+                addedTraitsContainer.removeChild(existingCourtTrait);
+            }
+
             const traitItem = document.createElement('div');
             traitItem.className = 'personality-item';
             traitItem.textContent = selectedValue;
+            traitItem.dataset.traitType = 'court';
 
             const removeButton = document.createElement('span');
             removeButton.className = 'remove';
@@ -407,7 +419,7 @@
 
             selectElement.value = ''; // Reset the dropdown
         }
-
+        
         function addCharacter() {
             const name = document.getElementById('name').value.trim();
             const female = document.getElementById('female').value;
@@ -416,21 +428,16 @@
 
             // Get birth date
             const birthYear = document.getElementById('birthYear').value.trim();
-            const birthMonth = document.getElementById('birthMonth').value.trim();
-            const birthDay = document.getElementById('birthDay').value.trim();
+            const birthMonth = Math.min(document.getElementById('birthMonth').value.trim(), 12);
+            const birthDay = Math.min(document.getElementById('birthDay').value.trim(), 31);
 
             // Get death date
             const deathYear = document.getElementById('deathYear').value.trim();
-            const deathMonth = document.getElementById('deathMonth').value.trim();
-            const deathDay = document.getElementById('deathDay').value.trim();
+            const deathMonth = Math.min(document.getElementById('deathMonth').value.trim(), 12);
+            const deathDay = Math.min(document.getElementById('deathDay').value.trim(), 31);
 
-            // Get selected personalities
-            const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
-
-            // Get selected education traits
-            const selectedEducationTraits = Array.from(document.querySelectorAll('#added-traits .personality-item')).map(item => item.textContent.replace('x', '').trim());
-            // Get selected court traits
-            const selectedCourtTraits = Array.from(document.querySelectorAll('#added-traits .personality-item')).map(item => item.textContent.replace('x', '').trim());
+            // Get selected traits
+            const selectedTraits = new Set(Array.from(document.querySelectorAll('#added-traits .personality-item')).map(item => item.textContent.replace('x', '').trim()));
 
             // Create character entry with incremented ID
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
@@ -440,18 +447,8 @@
             characterEntry += `  religion = ${document.getElementById('religion').value.trim()}\n`;
             characterEntry += `  culture = ${document.getElementById('culture').value.trim()}\n`;
 
-            // Add personalities
-            selectedPersonalities.forEach(personality => {
-                characterEntry += `  add_trait = ${personality}\n`;
-            });
-
-            // Add education traits
-            selectedEducationTraits.forEach(trait => {
-                characterEntry += `  add_trait = ${trait}\n`;
-            });
-
-            // Add court traits
-            selectedCourtTraits.forEach(trait => {
+            // Add traits
+            selectedTraits.forEach(trait => {
                 characterEntry += `  add_trait = ${trait}\n`;
             });
 
@@ -468,12 +465,12 @@
             if (deathYear && deathMonth && deathDay) {
                 characterEntry += `  ${deathYear}.${deathMonth}.${deathDay} = {\n`;
                 characterEntry += `    death = yes\n`;
-                characterEntry += `  }\n`;
+            characterEntry += `  }\n`;
             }
             characterEntry += `}\n\n`;
 
             characterData += characterEntry;
-            characters.push({ name, female, id: characterIdCounter }); // Store character for parent selection
+            characters.push({ name, female, id: `${namespace}_${characterIdCounter}`, father, mother, birthYear, deathYear }); // Store character for parent selection
             updateParentOptions();
             document.getElementById('output').textContent = characterData;
 
@@ -523,6 +520,42 @@
                 console.error('Could not copy text: ', err);
             });
         }
+
+        document.querySelectorAll('input, select').forEach(element => {
+            element.addEventListener('keydown', function(event) {
+                if (event.key === 'Enter') {
+                    event.preventDefault();
+                    const formElements = Array.from(document.querySelectorAll('input, select, button'));
+                    const index = formElements.indexOf(event.target);
+                    let nextElement = formElements[index + 1];
+                    while (nextElement && nextElement.closest('.content') && nextElement.closest('.content').style.display === 'none') {
+                        nextElement = formElements[formElements.indexOf(nextElement) + 1];
+                    }
+                    if (nextElement) {
+                        nextElement.focus();
+                    }
+                }
+            });
+        });
+
+        document.getElementById('birthMonth').setAttribute('max', '12');
+        document.getElementById('birthDay').setAttribute('max', '31');
+        document.getElementById('deathMonth').setAttribute('max', '12');
+        document.getElementById('deathDay').setAttribute('max', '31');
+
+        document.getElementById('birthMonth').addEventListener('input', function() {
+            if (this.value > 12) this.value = 12;
+        });
+        document.getElementById('birthDay').addEventListener('input', function() {
+            if (this.value > 31) this.value = 31;
+        });
+        document.getElementById('deathMonth').addEventListener('input', function() {
+            if (this.value > 12) this.value = 12;
+        });
+        document.getElementById('deathDay').addEventListener('input', function() {
+            if (this.value > 31) this.value = 31;
+        });
+
     </script>
 
 </body>
