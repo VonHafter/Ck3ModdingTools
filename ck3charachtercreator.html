@@ -113,7 +113,7 @@
         <input type="text" id="culture" placeholder="Enter Culture" required onkeypress="moveFocus(event, 'fatherSelect')">
     </div>
 
-    <button class="collapsible">Education Traits</button>
+    <button class="collapsible">Traits Selection</button>
     <div class="content">
         <label for="education-traits">Select Education Trait:</label>
         <select id="education-traits">
@@ -152,16 +152,9 @@
             <option value="Education_martial_prowess_3">Formidable Banneret</option>
             <option value="Education_martial_prowess_4">Famous Champion</option>
         </select>
-        <button onclick="addEducationTrait()">Add</button>
-        <div class="education-traits-pool" id="education-traits-pool">
-            <!-- Selected education traits will appear here -->
-        </div>
-    </div>
-
-    <button class="collapsible">Court Traits</button>
-    <div class="content">
+        
         <label for="court-traits">Select Court Trait:</label>
-        <select id="court-traits"></select>
+        <select id="court-traits">
             <option value="">Select Trait</option>
             <option value="Diplomatic_court_1">Diplomatic Court 1</option>
             <option value="Diplomatic_court_2">Diplomatic Court 2</option>
@@ -172,12 +165,8 @@
             <option value="Intrigue_court_1">Intrigue Court 1</option>
             <option value="Intrigue_court_2">Intrigue Court 2</option>
             <option value="Scholarly_court_1">Scholarly Court 1</option>
-            <option value="scholarly_court_2">Scholarly Court 2</option>
+            <option value="Scholarly_court_2">Scholarly Court 2</option>
         </select>
-        <button onclick="addCourtTrait()">Add</button>
-        <div class="court-traits-pool" id="court-traits-pool">
-            <!-- Selected court traits will appear here -->
-        </div>
     </div>
 
     <h2>Personalities</h2>
