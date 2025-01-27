@@ -349,6 +349,8 @@
             const selectedValue = selectElement.value;
             if (!selectedValue) return;
 
+            console.log(`Adding personality: ${selectedValue}`);
+
             const pool = document.getElementById('personality-pool');
             const personalityItem = document.createElement('div');
             personalityItem.classList.add('personality-item');
@@ -371,6 +373,7 @@
 
         function updatePersonalityOptions() {
             const selectedPersonalities = Array.from(document.querySelectorAll('.personality-item')).map(item => item.textContent.replace('x', '').trim());
+            console.log(`Selected personalities: ${selectedPersonalities}`);
             document.querySelectorAll('#personality-select option').forEach(option => {
                 option.disabled = selectedPersonalities.includes(personalityConflicts[option.value]);
             });
@@ -379,6 +382,8 @@
             const selectElement = document.getElementById('education-traits');
             const selectedValue = selectElement.value;
             if (!selectedValue) return;
+
+            console.log(`Adding education trait: ${selectedValue}`);
 
             const addedTraitsContainer = document.getElementById('added-traits');
 
@@ -410,6 +415,8 @@
             const selectElement = document.getElementById('court-traits');
             const selectedValue = selectElement.value;
             if (!selectedValue) return;
+
+            console.log(`Adding court trait: ${selectedValue}`);
 
             const addedTraitsContainer = document.getElementById('added-traits');
 
@@ -443,6 +450,8 @@
             const father = document.getElementById('fatherSelect').value;
             const mother = document.getElementById('motherSelect').value;
 
+            console.log(`Adding character: ${name}, Female: ${female}, Father: ${father}, Mother: ${mother}`);
+
             // Get birth date
             const birthYear = document.getElementById('birthYear').value.trim();
             const birthMonth = Math.min(document.getElementById('birthMonth').value.trim(), 12);
@@ -453,8 +462,13 @@
             const deathMonth = Math.min(document.getElementById('deathMonth').value.trim(), 12);
             const deathDay = Math.min(document.getElementById('deathDay').value.trim(), 31);
 
+            console.log(`Birth Date: ${birthYear}-${birthMonth}-${birthDay}, Death Date: ${deathYear}-${deathMonth}-${deathDay}`);
+
             // Get selected traits
             const selectedTraits = new Set(Array.from(document.querySelectorAll('#added-traits .personality-item')).map(item => item.textContent.replace('x', '').trim()));
+            const selectedPersonalities = new Set(Array.from(document.querySelectorAll('#personality-pool .personality-item')).map(item => item.textContent.replace('x', '').trim()));
+
+            console.log(`Selected Traits: ${Array.from(selectedTraits)}, Selected Personalities: ${Array.from(selectedPersonalities)}`);
 
             // Create character entry with incremented ID
             let characterEntry = `${namespace}_${characterIdCounter} = {\n`;
@@ -467,6 +481,11 @@
             // Add traits
             selectedTraits.forEach(trait => {
                 characterEntry += `  add_trait = ${trait}\n`;
+            });
+
+            // Add personalities
+            selectedPersonalities.forEach(personality => {
+                characterEntry += `  add_trait = ${personality}\n`;
             });
 
             if (father) {
@@ -499,6 +518,7 @@
         }
 
         function clearInputFields() {
+            console.log('Clearing input fields');
             document.getElementById('name').value = '';
             document.getElementById('fatherSelect').value = '';
             document.getElementById('motherSelect').value = '';
@@ -514,6 +534,7 @@
         }
 
         function updateParentOptions() {
+            console.log('Updating parent options');
             const fatherSelect = document.getElementById('fatherSelect');
             const motherSelect = document.getElementById('motherSelect');
 
@@ -532,6 +553,7 @@
 
         function copyToClipboard() {
             navigator.clipboard.writeText(characterData).then(() => {
+                console.log('Character data copied to clipboard');
                 alert('Character data copied to clipboard!');
             }).catch(err => {
                 console.error('Could not copy text: ', err);
